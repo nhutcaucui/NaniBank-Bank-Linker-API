@@ -1,7 +1,8 @@
-var router = express.Router();
+function timeValidate(req, res, next) {
+    let date = req.headers.date;
+    console.log(date);
+    
+    next();
+}
 
-router.post('/fund', function(req, res, next) {
-
-});
-
-module.exports = router;
+module.exports = timeValidate;

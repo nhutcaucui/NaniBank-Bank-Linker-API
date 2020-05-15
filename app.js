@@ -4,12 +4,11 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/transaction');
+var timeValidateMiddleware = require('./middleware/timeValidate');
+var transactionRouter = require('./routes/transaction');
 var usersRouter = require('./routes/users');
 
 var app = express();
-
-// view engine setup
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -17,8 +16,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/transaction', func)
-app.use('/transaction', indexRouter);
+app.use(timeValidateMiddleware);
+// app.use('/transaction', func)
+app.use('/transaction', transactionRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler

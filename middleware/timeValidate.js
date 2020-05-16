@@ -1,7 +1,7 @@
 
 function timeValidate(req, res, next) {
     let date = req.headers.date;
-    console.log(req.requestTime);
+    console.log("date", req.requestTime);
     
     next();
 }

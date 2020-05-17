@@ -17,16 +17,16 @@ async function sign(content) {
     return cleartext;
 }
 
-async function verify(content) {
+async function verify(content, publicKey) {
     try {
-        let { keys: [publicKey] } = await openpgp.key.readArmored(pukey);
+        let { keys: [key] } = await openpgp.key.readArmored(publicKey);
         let verified = await openpgp.verify({
             message: await openpgp.cleartext.readArmored(content),
-            publicKeys: [publicKey]
+            publicKeys: [key]
         });
     
         let { valid } = verified.signatures[0];
-    
+        
         if (valid) {
             console.log('signed by key id ' + verified.signatures[0].keyid.toHex());
         } else {

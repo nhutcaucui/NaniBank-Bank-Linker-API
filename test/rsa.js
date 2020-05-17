@@ -7,12 +7,12 @@ var publicKey = fs.readFileSync('./security/rsa.pub').toString();
 
 describe('RSA', function () {
     describe('', function () {
-        it('Sign and Verify', function () {
+        it('Sign and Verify', async function () {
             let content = "Hi mom";
-            let signature = rsa.sign(content, privateKey);
-            let status = rsa.verify(content,signature, publicKey);
+            let signature = await rsa.sign(content, privateKey);
+            let status = await rsa.verify(content, signature, publicKey);
 
-            assert.equal(status, true, "Naniiiiiiiiiiiiiiii");
+            assert.equal(status, true, "RSA Naniiiiiiiiiiiiiiii");
         });
     });
 });

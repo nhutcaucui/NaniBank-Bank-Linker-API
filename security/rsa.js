@@ -10,7 +10,7 @@ async function sign(content, privateKey) {
 async function verify(content, signature, privateKey) {
     let key = new NodeRSA(privateKey);
     let status = key.verify(content, signature);
-
+    key.verify()
     return status;
 }   
 

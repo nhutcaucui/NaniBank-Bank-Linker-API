@@ -1,8 +1,16 @@
-function timeValidate(req, res, next) {
-    let date = req.headers.date;
-    console.log(date);
+function partnerValidate(req, res, next) {
+	let name = req.body["name"];
     
+    if (!name) {
+        res.status(200).send({
+            "status": false,
+            "message": "name param is missing"
+        });
+
+        return;
+    }
+
     next();
 }
 
-module.exports = timeValidate;
+module.exports = partnerValidate;

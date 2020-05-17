@@ -11,7 +11,7 @@ router.get('/', function (req, res, next) {
 
 router.post('/draw', function (req, res, next) {
 	pgp.sign("meo").then((value) => {
-		pgp.verify("hi mom").then((success)=> {
+		pgp.verify(value).then((success)=> {
 			if (success) {
 				res.status(200).send("hi mom");
 			} else {

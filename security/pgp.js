@@ -10,8 +10,8 @@ async function sign(content) {
     // let prk = privateKey.export({type: "pkcs1", format: "pem"});
     // let puk = publicKey.export({type: "pkcs1",format: "pem"});
     const { data: cleartext } = await openpgp.sign({
-        message: openpgp.cleartext.fromText('Hello, World!'), // CleartextMessage or Message object
-        privateKeys: [privateKey]                             // for signing
+        message: openpgp.cleartext.fromText(content),
+        privateKeys: [privateKey]
     });
 
     return cleartext;
@@ -21,8 +21,8 @@ async function verify(content) {
     try {
         let { keys: [publicKey] } = await openpgp.key.readArmored(pukey);
         let verified = await openpgp.verify({
-            message: await openpgp.cleartext.readArmored(content),           // parse armored message
-            publicKeys: [publicKey] // for verification
+            message: await openpgp.cleartext.readArmored(content),
+            publicKeys: [publicKey]
         });
     
         let { valid } = verified.signatures[0];

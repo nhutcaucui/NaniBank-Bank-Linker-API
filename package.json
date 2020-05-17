@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test": "mocha"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -12,6 +13,7 @@
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
     "morgan": "~1.9.1",
+    "node-rsa": "^1.0.8",
     "openpgp": "^4.10.4",
     "sha256": "^0.2.0"
   },
@@ -26,5 +28,8 @@
   "bugs": {
     "url": "https://github.com/nhutcaucui/NaniBank-Bank-Linker-API/issues"
   },
-  "homepage": "https://github.com/nhutcaucui/NaniBank-Bank-Linker-API#readme"
+  "homepage": "https://github.com/nhutcaucui/NaniBank-Bank-Linker-API#readme",
+  "devDependencies": {
+    "mocha": "^7.1.2"
+  }
 }

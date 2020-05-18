@@ -1,52 +1,35 @@
 var express = require('express');
 var router = express.Router();
-const pgp = require('../security/pgp');
-const rsa = require('../security/rsa');
+
 const partner = require('../model/partner');
 const partnerMiddleware = require('../middleware/partnerValidate');
-
+const pgp = require('../security/pgp');
 router.get('/', function (req, res, next) {
 });
 
-router.post('/draw', partnerMiddleware, async function (req, res, next) {
+router.post('/draw', partnerMiddleware, async function (req, res) {
 	let id = req.body["id"];
-	let name = req.body["name"];
 	let request = req.body["request"];
-	let signature = req.body["signature"];
+	let amount = req.body["amount"];
 
-	let result = {
-		"status": false,
-		"message": ""
-	}
-
-	p = await partner.name(name);
-	if (p.length == 0) {
-		res.status(200).send({
-			"status": false,
-			"message": "invalid user"
-		});
-
-		return;
-	}
-
-	let publicKey = p[0]["publicKey"];
-	let type = p[0]["type"];
-	switch (type) {
-		case 1:
-			result.status = await rsa.verify("hi mom", signature);
-			break;
-		case 2:
-			result.status = await pgp.verify(signature, publicKey);
-			break;
-
-	}
-
-	res.status(200).send(result);
-
+	let signature = pgp.sign("hi mom");
+	res.status(200).send({
+		"status": true,
+		"message": "Draw successfully",
+		"Balance remaining": "",
+		"signature": signature
+	});
 });
 
-router.post('/charge', function (req, res, next) {
+router.post('/charge', partnerMiddleware, function (req, res) {
+	let amount = req.body["amount"];
 
+	res.status(200).send({
+		"status": true,
+		"message": "Draw successfully",
+		"balance remaining": "",
+		"signature": ""
+	});
 });
 
 module.exports = router;

@@ -51,6 +51,22 @@ function updatetb(tableName, updateField, conditionField, entity) {
 	});
 }
 
+function updatetbadd(tableName, updateField, conditionField, entity) {
+	return new Promise((resolve, reject) => {
+		let sql = `UPDATE ${tableName} SET ${updateField}= ${updateField} + ? WHERE ${conditionField}=?`;
+		console.log("update", entity[updateField]);
+		let params = [entity[updateField], entity[conditionField]];
+		db.query(sql, params, (error, value) => {
+			if (error) {
+				reject(error);
+			}
+			else {
+				resolve(value.changedRows);
+			}
+		});
+	});
+}
+
 function updatetbbyid(tableName, id, entity) {
 	return new Promise((resolve, reject) => {
 		let sql = `UPDATE ${tableName} SET ? WHERE ID=${id}`;
@@ -97,4 +113,5 @@ module.exports = {
 	addtb: addtb,
 	updatetbbyid: updatetbbyid,
 	customupdatetb: customupdatetb,
+	updatetbadd: updatetbadd
 }

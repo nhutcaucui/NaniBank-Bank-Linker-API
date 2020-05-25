@@ -6,7 +6,7 @@ var logger = require('morgan');
 
 var timeValidateMiddleware = require('./middleware/timeValidate');
 var transactionRouter = require('./routes/transaction');
-var usersRouter = require('./routes/users');
+var usersRouter = require('./routes/user/users');
 
 var app = express();
 
@@ -32,7 +32,7 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
+  res.status(err.status || 500).send('A problem occurred in ourside, we will fix it soon!');
 });
 
 module.exports = app;

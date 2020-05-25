@@ -11,10 +11,15 @@ function timeValidate(req, res, next) {
         return;
     }
     
-    let diff = moment(date, "X").unix() - moment().unix();
-    if (diff > 30)
+    console.log(date);
+    let send = moment(date, "X").unix();
+    let current = moment().unix();
+
+    let diff = current - send;
+    console.log(diff);
+    if (diff < 0 || diff > 30)
     {
-        console.log("[Time]", "request is over", diff, "seconds");
+        console.log("[Time]", "this request is over", diff, "seconds");
         res.status(200).send({
             "status": false,
             "message": "request is deprecated"

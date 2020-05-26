@@ -6,7 +6,7 @@ var logger = require('morgan');
 
 var timeValidateMiddleware = require('./middleware/timeValidate');
 var transactionRouter = require('./routes/transaction');
-var usersRouter = require('./routes/user/user');
+var usersRouter = require('./routes/users/user');
 
 var app = express();
 

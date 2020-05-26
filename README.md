@@ -4,10 +4,13 @@
 
 
 >**POST** /users/customer/ping  
+
     <pre>
     <b>Header</b>  
+    {  
     "timestamp": 12345679121  
     "authen-hash": "3vudiH0Kyo8c7Qa4ihIIvL/yO8fN+ondP6aEhFJlZTA="  
+    }  
 
     <b>Body</b>  
     {  
@@ -26,11 +29,14 @@
 
 
 >**POST** /transaction/add  
+
     <pre>
     <b>Header</b>   
+    {  
     "timestamp": 12345679121  
     "authen-hash": "3vudiH0Kyo8c7Qa4ihIIvL/yO8fN+ondP6aEhFJlZTA="  
     "sig": ""  
+    }  
 
     <b>Body</b>   
     {  

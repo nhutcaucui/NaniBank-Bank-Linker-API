@@ -7,9 +7,9 @@ var logger = require('morgan');
 var timeValidateMiddleware = require('./middleware/timeValidate');
 var transactionRouter = require('./routes/transaction');
 var usersRouter = require('./routes/users/user');
+require('dotenv').config()
 
 var app = express();
-
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -32,7 +32,8 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500).send('A problem occurred in ourside, we will fix it soon!');
+  res.status(err.status || 500).send('A problem occurred in our side, we will fix it soon!');
 });
+
 
 module.exports = app;

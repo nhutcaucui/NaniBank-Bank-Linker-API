@@ -22,14 +22,8 @@ async function verify(req, res, next) {
 console.log(publicKey);
 
     success = true;
-	switch (type) {
-		case "rsa":
-			success = await rsa.verify("hi mom", signature, publicKey);
-			break;
-		case "pgp":
-			success = await pgp.verify(signature, publicKey);
-			break;
-	}
+    
+	success = await pgp.verify(signature, publicKey);
 
     if (!success) {
 		res.status(200).send({

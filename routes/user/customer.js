@@ -1,8 +1,9 @@
 var express = require('express');
 var router = express.Router();
 const partnerMiddleware = require('../../middleware/partnerValidate');
+const hashMiddleware = require('../../middleware/hashValidate');
 
-router.use('/customer',partnerMiddleware, function (req, res) {
+router.post('/customer',[partnerMiddleware,hashMiddleware] , function (req, res) {
 
    res.status(200).send({
         "status": true,

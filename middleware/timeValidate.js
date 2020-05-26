@@ -1,7 +1,7 @@
 var moment = require('moment');
 
 function timeValidate(req, res, next) {
-    let date = req.headers.date;
+    let date = req.headers["timestamp"];
     if (date == undefined) {
         res.status(200).send({
             "status": false,

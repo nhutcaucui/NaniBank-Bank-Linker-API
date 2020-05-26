@@ -10,7 +10,7 @@ const pgp = require('../security/pgp');
 router.get('/', function (req, res, next) {
 });
 
-router.post('/draw', [partnerMiddleware], async function (req, res) {
+router.post('/draw', [partnerMiddleware, hashMiddleware], async function (req, res) {
 	let id = req.body["id"];
 	let request = req.body["request"];
 	let amount = req.body["amount"];
@@ -24,12 +24,12 @@ router.post('/draw', [partnerMiddleware], async function (req, res) {
 	});
 });
 
-router.post('/add', [partnerMiddleware], function (req, res) {
+router.post('/add', [partnerMiddleware, hashMiddleware], function (req, res) {
 	let id = req.body["id"];
 	let amount = req.body["amount"];
 	let signature = pgp.sign("hi mom");
 
-	debit.addBalance(id, amount)
+	//debit.addBalance(id, amount)
 
 	var ret = {
 		"status": true,

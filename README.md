@@ -4,16 +4,17 @@
 
 
 >**POST** /users/customer/ping  
-
-    **Header**  
+    <pre>
+    <b>Header</b>  
     "timestamp": 12345679121  
     "authen-hash": "3vudiH0Kyo8c7Qa4ihIIvL/yO8fN+ondP6aEhFJlZTA="  
 
-    **Body**  
+    <b>Body</b>  
     {  
         "name": "bank"  
         "id": 564521456  
     }  
+    <pre>
 
 
 "authen-hash": SHA256(timestamp+secretkey+body).digest(Base64)  
@@ -25,19 +26,19 @@
 
 
 >**POST** /transaction/add  
- 
-    **Header**  
+    <pre>
+    <b>Header</b>   
     "timestamp": 12345679121  
     "authen-hash": "3vudiH0Kyo8c7Qa4ihIIvL/yO8fN+ondP6aEhFJlZTA="  
     "sig": ""  
 
-    **Body**  
+    <b>Body</b>   
     {  
         "name": "bank"  
         "id": 564521456  
         "amount": 500  
     }  
-
+    </pre>
 
  "sig": signature sign với secret key  
  "amount": số tiền cần nộp  

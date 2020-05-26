@@ -9,7 +9,7 @@ function getId(id) {
 function addBalance(id, money) {
     var entity = new Object();
     entity["id"] = id;
-    entity[balance] = money;
+    entity["balance"] = money;
     return db.updatetbadd(tablename, balance, "id", entity);
 }
 

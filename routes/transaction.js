@@ -6,6 +6,7 @@ const partner = require('../model/partner');
 const debit = require('../model/debit_account');
 const partnerMiddleware = require('../middleware/partnerValidate');
 const hashMiddleware = require('../middleware/hashValidate');
+const verify = require('../middleware/verify');
 const pgp = require('../security/pgp');
 router.get('/', function (req, res, next) {
 });
@@ -24,12 +25,27 @@ router.post('/draw', [partnerMiddleware, hashMiddleware], async function (req, r
 	});
 });
 
-router.post('/add', [partnerMiddleware, hashMiddleware], function (req, res) {
+router.post('/add', [partnerMiddleware, hashMiddleware,verify], function (req, res) {
 	let id = req.body["id"];
+	if(id == undefined){
+		res.status(200).send({
+			"status": false,
+			"message": "id is missing",
+		});
+	}
+	
 	let amount = req.body["amount"];
+	if(amount == undefined){
+		res.status(200).send({
+			"status": false,
+			"message": "amount is missing",
+		});
+	}
+
 	let signature = pgp.sign("hi mom");
 
-	//debit.addBalance(id, amount)
+	p = debit.addBalance(id, amount)
+	console.log(p[0]);
 
 	var ret = {
 		"status": true,

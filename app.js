@@ -7,6 +7,7 @@ var logger = require('morgan');
 var timeValidateMiddleware = require('./middleware/timeValidate');
 var transactionRouter = require('./routes/transaction');
 var usersRouter = require('./routes/users/user');
+var partnerRouter = require('./routes/partner');
 require('dotenv').config()
 
 var app = express();
@@ -19,6 +20,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(timeValidateMiddleware);
 app.use('/transaction', transactionRouter);
 app.use('/users', usersRouter);
+app.use('/partner', partnerRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -25,20 +25,20 @@
  "name": tên ngân hàng đối tác  
  "id": số tài khoản cần tra  
 
- **RETURN**  
+   **Return**  
  <pre>
  <b>Success</b>
- {  
+    {  
         "status": true,  
         "message": "Here's a customer",  
         "id": 123445678,  
         "name": "Nobody"  
-   }  
+    }  
  <b>Failed</b>
- {  
+    {  
         "status": false,  
         "message": "Error message",    
-   }  
+    }  
  </pre>
 
 #### API nộp tiền
@@ -65,18 +65,18 @@
  "sig": signature sign với secret key  
  "amount": số tiền cần nộp  
 
- **RETURN**  
+   **Return**  
  <pre>
  <b>Success</b>
- {  
+    {  
         "status": true,  
         "message": "Transfer money successfully",  
         "balance": 5000000,  
         "signature": "signature go here"  
-   }  
+    }  
  <b>Failed</b>
- {  
+    {  
         "status": false,  
         "message": "Error message",    
-   }  
+    }  
  </pre>

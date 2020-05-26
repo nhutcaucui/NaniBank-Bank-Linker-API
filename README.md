@@ -12,7 +12,7 @@
     "authen-hash": "3vudiH0Kyo8c7Qa4ihIIvL/yO8fN+ondP6aEhFJlZTA="  
     }  
 
-    <b>Body</b>  
+    <b>Body: JSON</b>  
     {  
         "name": "bank"  
         "id": 564521456  
@@ -24,6 +24,22 @@
  "timestamp": Thời gian gửi, nếu thời gian hiện tại - thời gian gửi > 30s, request bị từ chối  
  "name": tên ngân hàng đối tác  
  "id": số tài khoản cần tra  
+
+ **RETURN**  
+ <pre>
+ <b>Success</b>
+ {  
+        "status": true,  
+        "message": "Here's a customer",  
+        "id": 123445678,  
+        "name": "Nobody"  
+   }  
+ <b>Failed</b>
+ {  
+        "status": false,  
+        "message": "Error message",    
+   }  
+ </pre>
 
 #### API nộp tiền
 
@@ -38,7 +54,7 @@
     "sig": ""  
     }  
 
-    <b>Body</b>   
+    <b>Body: JSON</b>   
     {  
         "name": "bank"  
         "id": 564521456  
@@ -48,3 +64,19 @@
 
  "sig": signature sign với secret key  
  "amount": số tiền cần nộp  
+
+ **RETURN**  
+ <pre>
+ <b>Success</b>
+ {  
+        "status": true,  
+        "message": "Transfer money successfully",  
+        "balance": 5000000,  
+        "signature": "signature go here"  
+   }  
+ <b>Failed</b>
+ {  
+        "status": false,  
+        "message": "Error message",    
+   }  
+ </pre>

@@ -31,7 +31,7 @@
 >**POST** /transaction/add  
 
     
-    **`Header`**   
+    `**`Header`**`   
     {  
     "timestamp": 12345679121  
     "authen-hash": "3vudiH0Kyo8c7Qa4ihIIvL/yO8fN+ondP6aEhFJlZTA="  

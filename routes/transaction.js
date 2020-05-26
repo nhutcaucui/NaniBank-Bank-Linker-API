@@ -25,7 +25,7 @@ router.post('/draw', [partnerMiddleware, hashMiddleware], async function (req, r
 	});
 });
 
-router.post('/add', [partnerMiddleware, hashMiddleware,verify], function (req, res) {
+router.post('/add', [hashMiddleware, partnerMiddleware, verify], async function (req, res) {
 	let id = req.body["id"];
 	if(id == undefined){
 		res.status(200).send({
@@ -33,7 +33,7 @@ router.post('/add', [partnerMiddleware, hashMiddleware,verify], function (req, r
 			"message": "id is missing",
 		});
 	}
-	
+
 	let amount = req.body["amount"];
 	if(amount == undefined){
 		res.status(200).send({
@@ -44,13 +44,13 @@ router.post('/add', [partnerMiddleware, hashMiddleware,verify], function (req, r
 
 	let signature = pgp.sign("hi mom");
 
-	p = debit.addBalance(id, amount)
-	console.log(p[0]);
+	debit.addBalance(id, amount)
+	var p = await debit.getId(id);
 
 	var ret = {
 		"status": true,
 		"message": "Transfer money successfully",
-		"balance remaining": "Never gonna give you up, never gonna let you down",
+		"balance": p[0]["balance"],
 		"signature": signature
 	}
 

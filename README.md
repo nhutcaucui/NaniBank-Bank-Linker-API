@@ -1,9 +1,9 @@
-### API for NaniBank
+## API cho NaniBank
 
-#### API lấy thông tin
+### API lấy thông tin
 
 
->**POST** /users/customer/ping  
+>**POST** /users/customer/get  
 
 <pre>
     <b>Header</b>  
@@ -25,7 +25,7 @@
  "name": tên ngân hàng đối tác  
  "id": số tài khoản cần tra  
 
-   **Return**  
+>**Return**  
  <pre>
  <b>Success</b>
     {  
@@ -41,7 +41,7 @@
     }  
  </pre>
 
-#### API nộp tiền
+### API nộp tiền
 
 
 >**POST** /transaction/add  
@@ -65,7 +65,7 @@
  "sig": signature sign với secret key  
  "amount": số tiền cần nộp  
 
-   **Return**  
+>**Return**  
  <pre>
  <b>Success</b>
     {  

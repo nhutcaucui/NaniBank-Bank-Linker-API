@@ -10,6 +10,7 @@ describe('PGP', function () {
         it('Sign and Verify', async function () {
             let content = "Hi mom";
             let signature = await pgp.sign(content, privateKey);
+            console.log(signature);
             let status = await pgp.verify(signature, publicKey);
 
             assert.equal(status, true, "PGP Naniiiiiiiiiiiiiiii");

@@ -1,10 +1,10 @@
 {
     "Database": {
         "dbConfig": {
-            "host": "mysql-nanibank-api",
+            "host": "mysql-db",
             "port": 3306,
             "user": "root",
-            "password": "nanibank",
+            "password": "",
             "database": "nanibank"
         }
     }

@@ -4,6 +4,7 @@ const prkey = fs.readFileSync('./security/nanibank-sec.asc').toString();
 const pukey = fs.readFileSync('./security/nanibank-pub.asc').toString();
 const passphrase = `himom`;
 
+//Sign the content by nanibank private key
 async function sign(content) {
     const { keys: [privateKey] } = await openpgp.key.readArmored(prkey);
     await privateKey.decrypt(passphrase);

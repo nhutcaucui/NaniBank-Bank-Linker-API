@@ -17,16 +17,16 @@ function timeValidate(req, res, next) {
 
     let diff = current - send;
     console.log(diff);
-    if (diff < 0 || diff > 30)
-    {
-        console.log("[Time]", "this request is over", diff, "seconds");
-        res.status(200).send({
-            "status": false,
-            "message": "request is deprecated"
-        });
+    // if (diff < 0 || diff > 30)
+    // {
+    //     console.log("[Time]", "this request is over", diff, "seconds");
+    //     res.status(200).send({
+    //         "status": false,
+    //         "message": "request is deprecated"
+    //     });
 
-        return;
-    }
+    //     return;
+    // }
 
     next();
 }

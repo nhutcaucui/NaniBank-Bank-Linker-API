@@ -1,6 +1,6 @@
 const partner = require('../model/partner');
 const pgp = require('../security/pgp');
-const rsa = require('../security/rsa');
+const fs = require('fs')
 
 async function verify(req, res, next) {
     let name = req.body["name"];
@@ -17,12 +17,7 @@ async function verify(req, res, next) {
     p = await partner.name(name);
 
     let publicKey = p[0]["publicKey"];
-    let type = p[0]["type"];
 
-console.log(publicKey);
-
-    success = true;
-    
 	success = await pgp.verify(signature, publicKey);
 
     if (!success) {

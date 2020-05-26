@@ -17,7 +17,7 @@
         "name": "bank"  
         "id": 564521456  
     }  
-<pre>  
+</pre>  
 
 
 "authen-hash": SHA256(timestamp+secretkey+body).digest(Base64)  

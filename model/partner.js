@@ -9,7 +9,17 @@ function name(name) {
     return db.loaddb(`SELECT * FROM ${tablename} WHERE name = '${name}'`)
 }
 
+function add(id, name, publicKey, hashMethod) {
+    var entity = new Object();
+    entity["id"] = id;
+    entity["publicKey"] = publicKey;
+    entity["name"] = name;
+    entity["hashMethod"] = hashMethod;
+    return db.addtb(tablename, entity);
+}
+
 module.exports = {
     id,
-    name
+    name,
+    add
 }

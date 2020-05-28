@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 
 const crypto = require("crypto-js");
-const partner = require('../model/partner');
 const debit = require('../model/debit_account');
 const partnerMiddleware = require('../middleware/partnerValidate');
 const hashMiddleware = require('../middleware/hashValidate');

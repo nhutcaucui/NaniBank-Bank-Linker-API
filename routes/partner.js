@@ -2,16 +2,10 @@ var express = require('express');
 var router = express.Router();
 const partner = require('../model/partner');
 
-router.post('/add', function (req, res) {
-    var id = req.body["id"];
-    if (id == undefined) {
-        res.status(200).send({
-            "status": false,
-            "message": "FBI, show id or else"
-        });
-    }
-    var name = req.body["name"];
-    if (name == undefined) {
+router.post('/add', async function (req, res) {
+   
+   var name = req.body["name"];
+    if(name == undefined){
         res.status(200).send({
             "status": false,
             "message": "Yo dawg you don't have a name?"
@@ -34,7 +28,13 @@ router.post('/add', function (req, res) {
         });
     }
 
-    partner.add(id, name, publicKey, hashMethod);
+    var success = await partner.add(name,publicKey,hashMethod);
+    if(!success){
+        res.status(200).send({
+            "status": false,
+            "message": "database error"
+        })
+    }
 
     res.status(200).send({
         "status": true,

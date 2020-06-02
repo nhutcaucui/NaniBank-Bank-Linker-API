@@ -1,3 +1,5 @@
+>**HOST** 35.240.195.17
+
 ## API cho NaniBank
 
 ### API lấy thông tin

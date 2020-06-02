@@ -56,4 +56,9 @@ router.post('/add', [hashMiddleware, partnerMiddleware, verify], async function 
 	res.status(200).send(ret);
 });
 
+
+router.post('/transaction', [userMiddleware], function(req, res) {
+    
+});
+
 module.exports = router;

@@ -4,37 +4,37 @@ const partner = require('../model/partner');
 
 router.post('/add', function (req, res) {
     var id = req.body["id"];
-    if(id == undefined){
+    if (id == undefined) {
         res.status(200).send({
             "status": false,
             "message": "FBI, show id or else"
         });
     }
-   var name = req.body["name"];
-    if(name == undefined){
+    var name = req.body["name"];
+    if (name == undefined) {
         res.status(200).send({
             "status": false,
             "message": "Yo dawg you don't have a name?"
         });
     }
 
-   var publicKey = req.body["publicKey"];
-   if(publicKey == undefined){
+    var publicKey = req.body["publicKey"];
+    if (publicKey == undefined) {
         res.status(200).send({
             "status": false,
             "message": "Hey hey hey, what is the key?"
         });
     }
 
-   var hashMethod = req.body["hashMethod"];
-   if(hashMethod == undefined){
-    res.status(200).send({
-        "status": false,
-        "message": "Dude, tell us how you hash your shit so we can contact you later"
-    });
+    var hashMethod = req.body["hashMethod"];
+    if (hashMethod == undefined) {
+        res.status(200).send({
+            "status": false,
+            "message": "Dude, tell us how you hash your shit so we can contact you later"
+        });
     }
 
-    partner.add(id,name,publicKey,hashMethod);
+    partner.add(id, name, publicKey, hashMethod);
 
     res.status(200).send({
         "status": true,

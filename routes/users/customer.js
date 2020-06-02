@@ -34,8 +34,12 @@ router.post('/get',[partnerMiddleware,hashMiddleware] , async function (req, res
    }); 
 });
 
+router.use('/get', function(req, res) {
+   
+})
 router.use('/ping', function (req, res) {
    res.status(200).send("ping"); 
 });
+
 
 module.exports = router;

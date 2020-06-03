@@ -10,6 +10,10 @@ db.connect((err) => {
 	console.log("[Database] - Connected");
 });
 
+/**
+ * Run a specified sql query
+ * @param {*} sql 
+ */
 function loaddb(sql) {
 	return new Promise((resolve, reject) => {
 		db.query(sql, (error, results, fields) => {
@@ -22,6 +26,11 @@ function loaddb(sql) {
 	});
 }
 
+/**
+ * 
+ * @param {*} tableName 
+ * @param {*} entity 
+ */
 function addtb(tableName, entity) {
 	return new Promise((resolve, reject) => {
 		var sql = `INSERT INTO ${tableName} SET ?`;
@@ -35,56 +44,38 @@ function addtb(tableName, entity) {
 	});
 }
 
-function updatetb(tableName, updateField, conditionField, entity) {
+/**
+ * Update rows in the table which matched the specified condition by specified value
+ * @param {*} tableName name of the table
+ * @param {*} conditionEntity condition for updating
+ * @param {*} valueEntity value for updating
+ */
+function updatetb(tableName, conditionEntity, valueEntity) {
 	return new Promise((resolve, reject) => {
-		let sql = `UPDATE ${tableName} SET ${updateField}=? WHERE ${conditionField}=?`;
-		console.log("update", entity[updateField]);
-		let params = [entity[updateField], entity[conditionField]];
+		let sql = `UPDATE ${tableName} SET ? WHERE ?`;
+		let params = [valueEntity, conditionEntity];
+		console.log(params);
 		db.query(sql, params, (error, value) => {
 			if (error) {
 				reject(error);
 			}
 			else {
+				console.log(value.changedRows);
 				resolve(value.changedRows);
 			}
 		});
 	});
 }
 
-function updatetbadd(tableName, updateField, conditionField, entity) {
+/**
+ * Delete rows in the table by specified condition
+ * @param {*} tableName name of the table
+ * @param {*} conditionEntity condition for deleting
+ */
+function deletetb(tableName, conditionEntity) {
 	return new Promise((resolve, reject) => {
-		let sql = `UPDATE ${tableName} SET ${updateField}= ${updateField} + ? WHERE ${conditionField}=?`;
-		console.log("update", entity[updateField]);
-		let params = [entity[updateField], entity[conditionField]];
-		db.query(sql, params, (error, value) => {
-			if (error) {
-				reject(error);
-			}
-			else {
-				resolve(value.changedRows);
-			}
-		});
-	});
-}
-
-function updatetbbyid(tableName, id, entity) {
-	return new Promise((resolve, reject) => {
-		let sql = `UPDATE ${tableName} SET ? WHERE ID=${id}`;
-		db.query(sql, entity, (error, value) => {
-			if (error) {
-				reject(error);
-			}
-			else {
-				resolve(value.changedRows);
-			}
-		});
-	});
-}
-
-function deletetb(tableName, idField, id) {
-	return new Promise((resolve, reject) => {
-		var sql = `DELETE FROM ${tableName} WHERE ${idField} = ?`;
-		db.query(sql, id, (error, value) => {
+		var sql = `DELETE FROM ${tableName} WHERE ?`;
+		db.query(sql, conditionEntity, (error, value) => {
 			if (error)
 				reject(error);
 			else {
@@ -111,7 +102,5 @@ module.exports = {
 	updatetb: updatetb,
 	deletetb: deletetb,
 	addtb: addtb,
-	updatetbbyid: updatetbbyid,
 	customupdatetb: customupdatetb,
-	updatetbadd: updatetbadd
 }

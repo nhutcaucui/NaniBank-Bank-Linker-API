@@ -9,7 +9,7 @@ function name(name) {
     return db.loaddb(`SELECT * FROM ${tablename} WHERE name = '${name}'`)
 }
 
-function add( name, publicKey, hashMethod) {
+function add(name, publicKey, hashMethod) {
     var entity = new Object();
 
     entity["publicKey"] = publicKey;

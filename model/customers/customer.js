@@ -7,12 +7,45 @@ const info = require('./customer_information');
 const message = require('./customer_message');
 const receiver = require('./customer_receiver');
 
-function getId(id) {
-    return db.loaddb(`SELECT * FROM ${tablename} WHERE id = '${id}'`);
+/**
+ * Return the customer which contains all relation tables
+ * */
+async function get(username) {
+    let user = await db.loaddb(`SELECT * FROM ${tablename} WHERE username = '${username}'`);
+    user.info = await info.get(user.id);
+    user.message = await message.get(user.id);
+    user.receiver = await receiver.get(user.id);
+    return user;
 }
 
-async function changePassword(id, old_password, new_password) {
-    let user = await getId(id)[0];
+/**
+ * Create new record of customer
+ * @param {*} username 
+ * @param {*} password 
+ */
+async function create(username, password) {
+    let user = await db.loaddb(`SELECT * FROM ${tablename} WHERE username = '${username}'`);
+
+    if (user.length > 0) return new Error("user is existed");
+    let hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+    let entity = {
+        username: username,
+        password: hashedPassword
+    }
+
+    user = await db.addtb(tablename, entity);
+
+    return user;
+}
+
+/**
+ * Change password of a specified user
+ * @param {*} username 
+ * @param {*} old_password for validating
+ * @param {*} new_password 
+ */
+async function changePassword(username, old_password, new_password) {
+    let user = await db.loaddb(`SELECT * FROM ${tablename} WHERE id = '${username}'`);
 
     if (user == undefined) return new Error("Id was not found");
 
@@ -20,21 +53,25 @@ async function changePassword(id, old_password, new_password) {
 
     if (!matchOldPassword) return new Error("Old password does not matched");
 
-    let hash = await bcrypt.hash(new_password, SALT_ROUNDS);
-    let entity = {
-        password: hash,
-        id: id
+    let hashedPassword = await bcrypt.hash(new_password, SALT_ROUNDS);
+
+    let conditionEntity = {
+        id: username
+    };
+
+    let valueEntity = {
+        password: hashedPassword,
     }
 
-    await db.updatetb(tablename, 'password', 'id', entity);
+    let changed = await db.updatetb(tablename, conditionEntity, valueEntity);
 
-    return {
-        "Status" : true,
-        "Message" : "Reset password successfully"
-    };
+    return changed
 }
 
+
 module.exports = {
-    getId,
-    changePassword
+    get: get,
+    changePassword,
+    create,
+    update
 }

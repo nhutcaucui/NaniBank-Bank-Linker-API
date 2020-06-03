@@ -22,43 +22,9 @@ router.post('/login', function (req, res) {
     });
 });
 
-router.get('/list', [userMiddleware], function (req, res) {
-    let list = "";
 
-    res.status(200).send({
-        "Status": true,
-        "Message": "",
-        list,
-    });
-});
 
-router.post('/receiver/', [userMiddleware], function (req, res) {
-    res.status(200).send({
-        "Status": true,
-        "Message": "",
-    });
-});
 
-router.get('/debt', [userMiddleware], function(req, res) {
-    res.status(200).send({
-        "Status": true,
-        "Message": "",
-    });
-});
-
-router.post('/debt', [userMiddleware], function (req, res) {
-    res.status(200).send({
-        "Status": true,
-        "Message": "",
-    });
-});
-
-router.delete('/debt', [userMiddleware], function(req, res) {
-    res.status(200).send({
-        "Status": true,
-        "Message": "",
-    });
-});
 
 router.post('/notify', [userMiddleware], function(req, res) {
     res.status(200).send({

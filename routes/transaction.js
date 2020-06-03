@@ -2,7 +2,8 @@ var express = require('express');
 var router = express.Router();
 
 const crypto = require("crypto-js");
-const debit = require('../model/debit_account');
+const debit = require('../model/customers/debit_account');
+const userMiddleware = require('../middleware/userValidate');
 const partnerMiddleware = require('../middleware/partnerValidate');
 const hashMiddleware = require('../middleware/hashValidate');
 const verify = require('../middleware/verify');
@@ -59,6 +60,10 @@ router.post('/add', [hashMiddleware, partnerMiddleware, verify], async function 
 
 router.post('/transaction', [userMiddleware], function(req, res) {
     
+});
+
+router.get('/transaction/history', [userMiddleware], function(req, res) {
+
 });
 
 module.exports = router;

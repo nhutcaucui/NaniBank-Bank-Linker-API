@@ -5,9 +5,9 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var timeValidateMiddleware = require('./middleware/timeValidate');
-var transactionRouter = require('./routes/transaction');
-var usersRouter = require('./routes/users/user');
-var partnerRouter = require('./routes/partner');
+var transactionRouter = require('./router/transaction');
+var usersRouter = require('./router/users/user');
+var partnerRouter = require('./router/partner');
 require('dotenv').config()
 
 var app = express();

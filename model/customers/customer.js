@@ -6,7 +6,7 @@ const SALT_ROUNDS = 10;
 const info = require('./customer_information');
 const message = require('./customer_message');
 const receiver = require('./customer_receiver');
-
+const jwt = require('jsonwebtoken');
 /**
  * Return the customer which contains all relation tables
  * */
@@ -26,7 +26,7 @@ async function get(username) {
 async function create(username, password) {
     let user = await db.loaddb(`SELECT * FROM ${tablename} WHERE username = '${username}'`);
 
-    if (user.length > 0) return new Error("user is existed");
+    if (user.length > 0) return new Error("User was existed");
     let hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
     let entity = {
         username: username,
@@ -45,9 +45,9 @@ async function create(username, password) {
  * @param {*} new_password 
  */
 async function changePassword(username, old_password, new_password) {
-    let user = await db.loaddb(`SELECT * FROM ${tablename} WHERE id = '${username}'`);
+    let user = await db.loaddb(`SELECT * FROM ${tablename} WHERE username = '${username}'`);
 
-    if (user == undefined) return new Error("Id was not found");
+    if (user == undefined) return new Error("User was not found");
 
     let matchOldPassword = await bcrypt.compare(old_password, user["password"]);
 
@@ -68,10 +68,26 @@ async function changePassword(username, old_password, new_password) {
     return changed
 }
 
+/**
+ * Login for the permission to use the service of nanibank
+ * @param {*} username username of customer
+ * @param {*} password passowrd of customer
+ */
+async function login(username, password) {
+    let customer = await db.loaddb(`SELECT * FROM ${tablename} WHERE username= '${username}'`);
+    if (customer.length == 0) return new Error("Username or password does not match");
+    customer = customer[0];
+
+    let match = bcrypt.compare(password, customer.password);
+    if (!match) return new Error("Username or password does not match");
+
+    let token = jwt.sign({id: customer.id}, 'himom');
+    return {token : token, customer : customer};
+}
 
 module.exports = {
-    get: get,
+    get,
     changePassword,
     create,
-    update
+    login
 }

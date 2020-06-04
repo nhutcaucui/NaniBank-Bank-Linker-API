@@ -31,7 +31,7 @@ async function create(owner) {
  * @param {*} id id of the debit account
  * @param {*} amount amount of money need to be charged, amount must not negative
  */
-function charge(id, amount) {
+async function charge(id, amount) {
     if (amount <= 0) return Error("Amount cannot be negative");
 
     let account = await get(id);

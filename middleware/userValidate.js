@@ -1,3 +1,5 @@
-async function userValidate(req, res, next) {
+function userValidate(req, res, next) {
     next();
 }
+
+module.exports = userValidate;

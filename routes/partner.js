@@ -1,9 +1,12 @@
 var express = require('express');
 var router = express.Router();
 const partner = require('../model/partner');
-
+const partnerMiddleware = require('../middleware/partnerValidate');
+const hashMiddleware = require('../middleware/hashValidate');
+const verify = require('../middleware/verify');
+const debitAccount = require('../model/customers/debit_account');
+const info = require('../model/customers/customer_information');
 router.post('/add', async function (req, res) {
-   
    var name = req.body["name"];
     if(name == undefined){
         res.status(200).send({
@@ -43,5 +46,57 @@ router.post('/add', async function (req, res) {
     })
 
 });
+
+router.post('/transfer', [hashMiddleware, partnerMiddleware, verify], async function (req, res) {
+	let id = req.body["id"];
+	if(id == undefined){
+		res.status(200).send({
+			"status": false,
+			"message": "id is missing",
+		});
+	}
+
+	let amount = req.body["amount"];
+	if(amount == undefined){
+		res.status(200).send({
+			"status": false,
+			"message": "amount is missing",
+		});
+	}
+
+	let signature = pgp.sign("hi mom");
+
+	debit.addBalance(id, amount)
+	var p = await debit.getId(id);
+
+	var ret = {
+		"status": true,
+		"message": "Transfer money successfully",
+		"balance": p[0]["balance"],
+		"signature": signature
+	}
+
+	res.status(200).send(ret);
+});
+
+router.get('/', [hashMiddleware, partnerMiddleware, verify], async function(req, res) {
+    let id = req.query["id"];
+    if ( id == undefined) {
+        res.status(200).send({
+            "Status" : false,
+            "Message" : "id param is missing"
+        });
+
+        return;
+    }
+
+    let result = await info.get(id);
+
+    res.status(200).send({
+        "Status" : true, 
+        "Info" : info,
+    });
+});
+
 
 module.exports = router;

@@ -3,8 +3,18 @@ const moment = require('moment');
 const tablename = "debit_account";
 const balance = "balance";
 
-function get(owner) {
-    return db.loaddb(`SELECT * FROM ${tablename} WHERE owner = '${owner}'`);
+async function getByOwner(owner) {
+    let result = await db.loaddb(`SELECT * FROM ${tablename} WHERE owner=${owner}`);
+    if (result.length == 0) return new Error("This customer does not have any debit account");
+
+    return result[0];
+}
+
+async function getById(id) {
+    let result = await db.loaddb(`SELECT * FROM ${tablename} WHERE id=${id}`);
+    if (result.length == 0) return new Error("Debit account was not found");
+
+    return result[0];
 }
 
 /**
@@ -15,7 +25,7 @@ async function create(owner) {
     let id = 9704366600000000 + owner;
     let result = await db.loaddb(`SELECT * FROM ${tablename} WHERE id=${id}`);
     if (result.length > 0) return new Error("User already have the debit account");
-    
+
     let issue_date = moment().add(3, 'years').unix();
 
     let entity = {
@@ -36,9 +46,10 @@ async function create(owner) {
 async function charge(id, amount) {
     if (amount <= 0) return Error("Amount cannot be negative");
 
-    let account = await get(id);
-    if (account.length == 0) return new Error("Id was not found");
+    let result = await getById(id);
+    if (result instanceof Error) return result;
 
+    let account = result;
     account.balance += amount;
 
     let conditionEntity = {
@@ -58,10 +69,11 @@ async function charge(id, amount) {
  */
 async function draw(id, amount) {
     if (amount <= 0) return Error("Amount cannot be negative");
-    let account = await get(id)
+    let result = await getById(id);
 
-    if (account.length == 0) return new Error("Id was not found");
+    if (result instanceof Error) return result;
 
+    let account = result;
     let balance = parseFloat(account.balance);
 
     if (balance < amount) return Error("Balance is not enough");
@@ -81,7 +93,7 @@ async function draw(id, amount) {
 
 module.exports = {
     create,
-    get,
+    getByOwner: getByOwner,
     draw,
     charge,
 }

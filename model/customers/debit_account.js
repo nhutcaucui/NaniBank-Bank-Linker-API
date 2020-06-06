@@ -92,8 +92,9 @@ async function draw(id, amount) {
 }
 
 module.exports = {
+    getByOwner,
+    getById,
     create,
-    getByOwner: getByOwner,
     draw,
     charge,
 }

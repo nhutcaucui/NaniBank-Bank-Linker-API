@@ -6,6 +6,8 @@ const hashMiddleware = require('../middleware/hashValidate');
 const verify = require('../middleware/verify');
 const debitAccount = require('../model/customers/debit_account');
 const info = require('../model/customers/customer_information');
+const partner_history = require('../model/partner_transaction_history');
+
 router.post('/add', async function (req, res) {
    var name = req.body["name"];
     if(name == undefined){
@@ -98,5 +100,12 @@ router.get('/', [hashMiddleware, partnerMiddleware, verify], async function(req,
     });
 });
 
+router.get('/history', [], async function(req, res) {
+    let id = req.query["id"];
+    let from = req.query["from"];
+    let to = req.query["to"];
+    
+    partner_history.get(id);
+})
 
 module.exports = router;

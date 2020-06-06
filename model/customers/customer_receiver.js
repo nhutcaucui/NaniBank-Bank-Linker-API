@@ -1,38 +1,48 @@
 const db = require('../db');
 const tablename = "customer_receiver";
 
-function get(id) {
-    return db.loaddb(`SELECT * FROM ${tablename} WHERE id = '${id}'`);
+/**
+ * get list of receivers of a specified customer
+ * @param {*} id customer id
+ */
+async function get(id) {
+    let result = await db.loaddb(`SELECT * FROM ${tablename} WHERE customer_id=${id}`);
+
+    return result;
 }
 
 /**
  * Create new record of receiver
- * @param {*} id id of customer
- * @param {*} receiver customer id of the receiver
+ * @param {*} customer_id id of customer
+ * @param {*} receiver account id of the receiver
  * @param {*} remind_name 
  */
-function create(id, receiver, remind_name) {
+async function create(customer_id, receiver, remind_name) {
     let entity = {
-        id : id,
+        customer_id : customer_id,
         receiver: receiver,
         remind_name : remind_name
     }
 
-    return db.addtb(tablename, entity);
+    let result = await db.addtb(tablename, entity);
+
+    return result;
 }
 
 /**
  * Remove a specified receiver from a customer
- * @param {*} id 
- * @param {*} receiver 
+ * @param {*} customer_id customer id
+ * @param {*} receiver account id of the receiver
  */
-function remove(id, receiver) {
+async function remove(customer_id, receiver) {
     let entity = {
-        id: id,
-        receiver : receiver,
+        customer_id: customer_id,
+        // receiver : receiver,
     };
 
-    return db.deletetb(tablename, entity);
+    console.log(entity);
+    let result = await db.deletetb(tablename, entity);
+    return result;
 }
 
 module.exports = {

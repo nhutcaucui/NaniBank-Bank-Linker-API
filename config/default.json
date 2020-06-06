@@ -6,5 +6,7 @@
             "password": "manager",
             "database": "nanibank"
         }
-    }
+    },
+    "secret-key": "himom",
+    "60-days-key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZXhwIjoxNTk2NjIyMDMzLCJpYXQiOjE1OTE0MzgwMzN9.yzEJk2Jp9yLrOvVD-TFUnhj5Yf-w2k1VKm58jGg7zQY"
 }

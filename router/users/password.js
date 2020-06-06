@@ -10,7 +10,7 @@ router.post('/forget', async function(req, res) {
     let token = "";
     let id = req.body["id"];
 
-    let user = await customers.get(id);
+    let user = await customers.getByName(id);
     if (user.length == 0){
         res.status(200).send({
             "Status" : false,

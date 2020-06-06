@@ -7,10 +7,13 @@ const info = require('./customer_information');
 const message = require('./customer_message');
 const receiver = require('./customer_receiver');
 const jwt = require('jsonwebtoken');
+const config = require('config');
+const secret_key = config.get('secret-key');
+const moment = require('moment');
 /**
  * Return the customer which contains all relation tables
  * */
-async function get(username) {
+async function getByName(username) {
     let result = await db.loaddb(`SELECT * FROM ${tablename} WHERE username = '${username}'`);
 
     if (result.length == 0) return new Error("User was not exist");
@@ -18,6 +21,19 @@ async function get(username) {
 
     user.info = await info.get(user.id);
     user.message = await message.get(user.id);
+    user.receiver = await receiver.get(user.id);
+
+    return user;
+}
+
+async function getById(id) {
+    let result = await db.loaddb(`SELECT * FROM ${tablename} WHERE id=${id}`);
+
+    if (result.length == 0) return new Error("UserId was not exist");
+    let user = result[0];
+
+    user.info = await info.get(user.id);
+    user.message = await message.getInRange(user.id);
     user.receiver = await receiver.get(user.id);
 
     return user;
@@ -31,7 +47,7 @@ async function get(username) {
 async function create(username, password) {
     let user = await db.loaddb(`SELECT * FROM ${tablename} WHERE username = '${username}'`);
 
-    if (user instanceof Error) return user;
+    if (user.length > 0) return new Error("This username is already exist");
 
     let hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
     let entity = {
@@ -53,7 +69,7 @@ async function create(username, password) {
 async function changePassword(username, old_password, new_password) {
     let result = await db.loaddb(`SELECT * FROM ${tablename} WHERE username = '${username}'`);
 
-    if (result instanceof Error) return result;
+    if (result.length == 0) return new Error("This user was not found");
     let user = result[0];
 
     let matchOldPassword = await bcrypt.compare(old_password, user["password"]);
@@ -81,19 +97,23 @@ async function changePassword(username, old_password, new_password) {
  * @param {*} password passowrd of customer
  */
 async function login(username, password) {
-    let customer = await db.loaddb(`SELECT * FROM ${tablename} WHERE username= '${username}'`);
-    if (customer.length == 0) return new Error("Username or password does not match");
-    customer = customer[0];
+    let result = await getByName(username);
+    if (result instanceof Error) return new Error("Username or password does not match");
 
+    let customer = result;
     let match = bcrypt.compare(password, customer.password);
     if (!match) return new Error("Username or password does not match");
 
-    let token = jwt.sign({id: customer.id}, 'himom');
-    return {token : token, customer : customer};
+    let token = jwt.sign({id: customer.id, exp: moment().add(15, "minutes").unix()}, secret_key);
+    return {token : token, customer : {
+        id: customer.id,
+        customer: customer
+    }};
 }
 
 module.exports = {
-    get,
+    getByName,
+    getById,
     changePassword,
     create,
     login

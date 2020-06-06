@@ -3,6 +3,7 @@ var router = express.Router();
 
 const debit = require('../model/customers/debit_account');
 const userMiddleware = require('../middleware/userValidate');
+const otpMiddleware = require('../middleware/otpValidate');
 const history = require('../model/transaction_history');
 
 router.post('/charge', [userMiddleware], async function (req, res) {
@@ -27,7 +28,7 @@ router.post('/charge', [userMiddleware], async function (req, res) {
 
 });
 
-router.post('/draw', [userMiddleware], async function (req, res) {
+router.post('/draw', [userMiddleware, otpMiddleware], async function (req, res) {
 	let id = req.body["id"];
 	let amount = req.body["amount"];
 
@@ -42,7 +43,6 @@ router.post('/draw', [userMiddleware], async function (req, res) {
 		return
 	}
 
-
 	res.status(200).send({
 		"Status": true,
 		"Message": "Draw successfully",
@@ -50,7 +50,8 @@ router.post('/draw', [userMiddleware], async function (req, res) {
 	});
 });
 
-router.get('/history', [userMiddleware], async function (req, res) {
+
+router.get('/history', [userMiddleware, otpMiddleware], async function (req, res) {
 	let id = req.query["id"];
 	let filter = req.query["filter"] == undefined ? "both" : req.query["filter"];
 	let receiverHistories;

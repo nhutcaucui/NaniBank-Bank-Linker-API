@@ -11,10 +11,15 @@ const jwt = require('jsonwebtoken');
  * Return the customer which contains all relation tables
  * */
 async function get(username) {
-    let user = await db.loaddb(`SELECT * FROM ${tablename} WHERE username = '${username}'`);
+    let result = await db.loaddb(`SELECT * FROM ${tablename} WHERE username = '${username}'`);
+
+    if (result.length == 0) return new Error("User was not exist");
+    let user = result[0];
+
     user.info = await info.get(user.id);
     user.message = await message.get(user.id);
     user.receiver = await receiver.get(user.id);
+
     return user;
 }
 
@@ -26,7 +31,8 @@ async function get(username) {
 async function create(username, password) {
     let user = await db.loaddb(`SELECT * FROM ${tablename} WHERE username = '${username}'`);
 
-    if (user.length > 0) return new Error("User was existed");
+    if (user instanceof Error) return user;
+
     let hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
     let entity = {
         username: username,
@@ -45,9 +51,10 @@ async function create(username, password) {
  * @param {*} new_password 
  */
 async function changePassword(username, old_password, new_password) {
-    let user = await db.loaddb(`SELECT * FROM ${tablename} WHERE username = '${username}'`);
+    let result = await db.loaddb(`SELECT * FROM ${tablename} WHERE username = '${username}'`);
 
-    if (user == undefined) return new Error("User was not found");
+    if (result instanceof Error) return result;
+    let user = result[0];
 
     let matchOldPassword = await bcrypt.compare(old_password, user["password"]);
 

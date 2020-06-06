@@ -3,8 +3,8 @@ const moment = require('moment');
 const tablename = "debit_account";
 const balance = "balance";
 
-function get(id) {
-    return db.loaddb(`SELECT * FROM ${tablename} WHERE id = '${id}'`);
+function get(owner) {
+    return db.loaddb(`SELECT * FROM ${tablename} WHERE owner = '${owner}'`);
 }
 
 /**
@@ -12,12 +12,14 @@ function get(id) {
  * @param {*} owner customer id of the owner
  */
 async function create(owner) {
-    let account = await db.loaddb(`SELECT * FROM ${tablename} WHERE owner = '${owner}'`);
+    let id = 9704366600000000 + owner;
+    let result = await db.loaddb(`SELECT * FROM ${tablename} WHERE id=${id}`);
+    if (result.length > 0) return new Error("User already have the debit account");
+    
     let issue_date = moment().add(3, 'years').unix();
 
-    if (account.length > 0) return new Error("User already have the debit account");
-
     let entity = {
+        id : id,
         owner : owner,
         balance : 0,
         issue_date : issue_date,

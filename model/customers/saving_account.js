@@ -1,8 +1,9 @@
 const db = require('../db');
+const moment = require('moment');
 const tablename = "saving_account";
 
-function get(id) {
-    return db.loaddb(`SELECT * FROM ${tablename} WHERE id = '${id}'`);
+function get(owner) {
+    return db.loaddb(`SELECT * FROM ${tablename} WHERE owner = '${owner}'`);
 }
 
 /**
@@ -11,14 +12,15 @@ function get(id) {
  * @param {*} name 
  * @param {*} time 
  */
-function create(owner, name, time) {
-    let account = db.loaddb(`SELECT * FORM ${tablename} WHERE owner = '${owner}' AND name = '${name}'`);
-
-    if (account.length > 0) return new Error("Saving account name is duplicated");
+async function create(owner, name, time) {
+    let result = await db.loaddb(`SELECT * FROM ${tablename} WHERE owner=${owner} AND name='${name}'`);
+    if (result.length > 0) return new Error("Saving account name is duplicated");
 
     let entity = {
         owner: owner,
         name: name,
+        balance : 0,
+        created_date: moment().unix(),
         time: time,
     }
     return await db.addtb(tablename, entity);
@@ -29,12 +31,13 @@ function create(owner, name, time) {
  * @param {*} id id of the saving account
  * @param {*} amount amount of money need to be Saved, amount must not negative
  */
-function charge(id, amount) {
+async function charge(id, amount) {
     if (amount <= 0) return Error("Amount cannot be negative");
 
-    let account = await get(id);
-    if (account.length == 0) return new Error("Id was not found");
+    let result = await db.loaddb(`SELECT * FROM ${tablename} WHERE id=${id}`);
+    if (result.length == 0) return new Error("Id was not found");
 
+    let account = result[0];
     account.balance += amount;
 
     let conditionEntity = {
@@ -54,9 +57,11 @@ function charge(id, amount) {
  */
 async function draw(id, amount) {
     if (amount <= 0) return Error("Amount cannot be negative");
-    let account = await get(id)
 
-    if (account.length == 0) return new Error("Id was not found");
+    let result = await db.loaddb(`SELECT * FROM ${tablename} WHERE id=${id}`);
+    if (result.length == 0) return new Error("Id was not found");
+
+    let account = result[0];
 
     let balance = parseFloat(account.balance);
 

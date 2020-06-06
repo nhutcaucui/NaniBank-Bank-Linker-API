@@ -2,8 +2,11 @@ const db = require('../db');
 const moment = require('moment');
 const tablename = "saving_account";
 
-function get(owner) {
-    return db.loaddb(`SELECT * FROM ${tablename} WHERE owner = '${owner}'`);
+async function get(owner) {
+    let result = await db.loaddb(`SELECT * FROM ${tablename} WHERE owner = '${owner}'`);
+    if (result.length == 0) return Error("This customer does not have any saving account");
+
+    return result;
 }
 
 /**

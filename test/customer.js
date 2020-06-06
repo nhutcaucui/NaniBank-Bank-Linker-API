@@ -17,7 +17,7 @@ describe('Account', function() {
     });
 
     it('cretate debit account', async function() {
-        let c = await customer.get("nvnamsss");
+        let c = await customer.getByName("nvnamsss");
         assert.equal(c instanceof Error, false, c.message);
 
         let result = await debit.create(c.id);
@@ -28,7 +28,7 @@ describe('Account', function() {
     });
 
     it('create saving account', async function() {
-        let c = await customer.get("nvnamsss");
+        let c = await customer.getByName("nvnamsss");
         assert.equal(c instanceof Error, false, c.message);
         
         let result = await saving.create(c.id, "new pc", moment().add(1, "years").unix());
@@ -44,9 +44,9 @@ describe('Account', function() {
 
 describe('Transaction', function() {
     it('charge debit account', async function(){
-        let result = await customer.get("nvnamsss");
+        let result = await customer.getByName("nvnamsss");
         assert.equal(result instanceof Error, false);
-        result = await debit.get(result.id);
+        result = await debit.getByOwner(result.id);
 
         assert.equal(result instanceof Error, false);
         result = await debit.charge(result.id, 1000000);
@@ -54,15 +54,17 @@ describe('Transaction', function() {
     });
 
     it('draw debit account', async function() {
-       let result = await customer.get("nvnamsss");
+       let result = await customer.getByName("nvnamsss");
        assert.equal(result instanceof Error, false);
-       result = await debit.get(result.id);
-       
+       let c = result;
+       result = await debit.getByOwner(c.id);
        assert.equal(result instanceof Error, false);
-       result = await debit.draw(result.id, 20000000);
+       let d = result;
+
+       result = await debit.draw(d.id, 20000000);
        assert.equal(result instanceof Error, true, result.message);
 
-       result = await debit.draw(result.id, 1000000);
+       result = await debit.draw(d.id, 1000000);
        assert.equal(result instanceof Error, false);
     });
 })

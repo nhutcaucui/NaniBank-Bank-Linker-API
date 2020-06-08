@@ -40,7 +40,7 @@ router.post('/draw', [userMiddleware, otpMiddleware], async function (req, res) 
 			"Message": result.message
 		});
 
-		return
+		return;
 	}
 
 	res.status(200).send({

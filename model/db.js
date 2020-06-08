@@ -14,7 +14,7 @@ db.connect((err) => {
  * Run a specified sql query
  * @param {*} sql 
  */
-function loaddb(sql) {
+function query(sql) {
 	return new Promise((resolve, reject) => {
 		db.query(sql, (error, results, fields) => {
 			if (error)
@@ -38,14 +38,16 @@ function addtb(tableName, entity) {
 			if (error)
 				resolve(error);
 			else {
-				resolve(value.insertId);
+				resolve(value);
 			}
 		});
 	});
 }
 
 /**
- * Update rows in the table which matched the specified condition by specified value
+ * Update rows in the table which matched a specified condition by a specified value
+ * 
+ * Note that updatetb doesnt work with multiple condition use case
  * @param {*} tableName name of the table
  * @param {*} conditionEntity condition for updating
  * @param {*} valueEntity value for updating
@@ -68,7 +70,9 @@ function updatetb(tableName, conditionEntity, valueEntity) {
 }
 
 /**
- * Delete rows in the table by specified condition
+ * Delete rows in the table by a specified condition.
+ * 
+ * Note that deletetb doesnt work with multiple condition
  * @param {*} tableName name of the table
  * @param {*} conditionEntity condition for deleting
  */
@@ -86,6 +90,9 @@ function deletetb(tableName, conditionEntity) {
 	});
 }
 
+/**
+ * Delete rows in the table by specified condition
+ */
 function customupdatetb(sql, entity) {
 	return new Promise((resolve, reject) => {
 		db.query(sql, entity, (error, value) => {
@@ -98,8 +105,9 @@ function customupdatetb(sql, entity) {
 	});
 }
 
+
 module.exports = {
-	loaddb: loaddb,
+	query: query,
 	updatetb: updatetb,
 	deletetb: deletetb,
 	addtb: addtb,

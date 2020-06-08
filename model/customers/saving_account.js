@@ -3,7 +3,7 @@ const moment = require('moment');
 const tablename = "saving_account";
 
 async function get(owner) {
-    let result = await db.loaddb(`SELECT * FROM ${tablename} WHERE owner = '${owner}'`);
+    let result = await db.query(`SELECT * FROM ${tablename} WHERE owner = '${owner}'`);
     if (result.length == 0) return Error("This customer does not have any saving account");
 
     return result;
@@ -11,12 +11,12 @@ async function get(owner) {
 
 /**
  * Create a new saving account for a specified customer
- * @param {*} owner 
- * @param {*} name 
- * @param {*} time 
+ * @param {*} owner customer id
+ * @param {*} name name of the saving account
+ * @param {*} time the term of the saving account
  */
 async function create(owner, name, time) {
-    let result = await db.loaddb(`SELECT * FROM ${tablename} WHERE owner=${owner} AND name='${name}'`);
+    let result = await db.query(`SELECT * FROM ${tablename} WHERE owner=${owner} AND name='${name}'`);
     if (result.length > 0) return new Error("Saving account name is duplicated");
 
     let entity = {
@@ -26,7 +26,11 @@ async function create(owner, name, time) {
         created_date: moment().unix(),
         time: time,
     }
-    return await db.addtb(tablename, entity);
+
+    result = await db.addtb(tablename, entity);
+    if (result instanceof Error) return result;
+
+    return entity;
 }
 
 /**
@@ -37,7 +41,7 @@ async function create(owner, name, time) {
 async function charge(id, amount) {
     if (amount <= 0) return Error("Amount cannot be negative");
 
-    let result = await db.loaddb(`SELECT * FROM ${tablename} WHERE id=${id}`);
+    let result = await db.query(`SELECT * FROM ${tablename} WHERE id=${id}`);
     if (result.length == 0) return new Error("Id was not found");
 
     let account = result[0];
@@ -61,7 +65,7 @@ async function charge(id, amount) {
 async function draw(id, amount) {
     if (amount <= 0) return Error("Amount cannot be negative");
 
-    let result = await db.loaddb(`SELECT * FROM ${tablename} WHERE id=${id}`);
+    let result = await db.query(`SELECT * FROM ${tablename} WHERE id=${id}`);
     if (result.length == 0) return new Error("Id was not found");
 
     let account = result[0];

@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const partner = require('../model/partner');
 const partnerMiddleware = require('../middleware/partnerValidate');
+const userMiddleware = require('../middleware/userValidate');
 const hashMiddleware = require('../middleware/hashValidate');
 const verify = require('../middleware/verify');
 const debitAccount = require('../model/customers/debit_account');
@@ -101,11 +102,76 @@ router.get('/', [hashMiddleware, partnerMiddleware, verify], async function(req,
 });
 
 router.get('/history', [], async function(req, res) {
-    let id = req.query["id"];
+    let partner_id = req.query["parter_id"];
     let from = req.query["from"];
     let to = req.query["to"];
-    
-    partner_history.get(id);
+    if (partner_id == undefined) {
+        res.status(200).send({
+            "Status" : false,
+            "Message" : "partner_id param is missing"
+        });
+        return;
+    }
+
+    if (from == undefined) {
+        res.status(200).send({
+            "Status" : false,
+            "Message" : "from param is missing"
+        });
+        return;
+    }
+
+    if (to == undefined) {
+        res.status(200).send({
+            "Status" : false,
+            "Message" : "to param is missing"
+        });
+        return;
+    }
+
+    let result = await partner_history.get(partner_id, from, to);
+
+    if (result instanceof Error) {
+        res.status(200).send({
+            "Status" : false,
+            "Message" : result.message
+        });
+        return;
+    }
+
+    res.status(200).send({
+        "Status" : false,
+        "Message" : "Get history successfully",
+        "Histories" : result
+    });
 })
+
+router.get('/statistic', [userMiddleware], async function(req, res) {
+    let partner_id = req.query["partner_id"];
+    if (partner_id == undefined) {
+        res.status(200).send({
+            "Status": false,
+            "Message" : "partner_id param is missing"
+        });
+
+        return;
+    }
+
+    let result = await partner_history.statistic(partner_id);
+    if (result instanceof Error) {
+        res.status(200).send({
+            "Status" : false,
+            "Message" : result.message
+        });
+
+        return;
+    }
+
+    res.status(200).send({
+        "Status" : true,
+        "Message" : "Statistic successfully",
+        "Result" : result
+    });
+});
 
 module.exports = router;

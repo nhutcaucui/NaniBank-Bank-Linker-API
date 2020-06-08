@@ -8,6 +8,9 @@ var timeValidateMiddleware = require('./middleware/timeValidate');
 var transactionRouter = require('./router/transaction');
 var usersRouter = require('./router/users/user');
 var partnerRouter = require('./router/partner');
+var debtRouter = require('./router/debt');
+var debitRouter= require('./router/debit_account');
+var savingRouter = require('./router/saving_account');
 require('dotenv').config()
 
 var app = express();
@@ -21,7 +24,9 @@ app.use(timeValidateMiddleware);
 app.use('/transaction', transactionRouter);
 app.use('/users', usersRouter);
 app.use('/partner', partnerRouter);
-
+app.use('/debt', debtRouter);
+app.use('/debit', debitRouter);
+app.use('/saving', savingRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

@@ -1,15 +1,15 @@
 const db = require('./db');
 const tablename = "partner";
 
-function id(id) {
-    return db.loaddb(`SELECT * FROM ${tablename} WHERE id = '${id}'`);
+async function id(id) {
+    return await db.loaddb(`SELECT * FROM ${tablename} WHERE id = '${id}'`);
 }
 
-function name(name) {
-    return db.loaddb(`SELECT * FROM ${tablename} WHERE name = '${name}'`)
+async function name(name) {
+    return await db.loaddb(`SELECT * FROM ${tablename} WHERE name = '${name}'`)
 }
 
-function add(name, publicKey, hashMethod) {
+async function add(name, publicKey, hashMethod) {
     var entity = new Object();
 
     entity["publicKey"] = publicKey;

@@ -3,6 +3,7 @@ var router = express.Router();
 const customer = require('../../model/customers/customer');
 const receiver = require('../../model/customers/customer_receiver');
 const debit = require('../../model/customers/debit_account');
+const token = require('../../model/customers/customer_token');
 const partnerMiddleware = require('../../middleware/partnerValidate');
 const hashMiddleware = require('../../middleware/hashValidate');
 const userMiddleware = require('../../middleware/userValidate');
@@ -267,6 +268,37 @@ router.delete('/debt', [userMiddleware], function (req, res) {
       "Message": "",
    });
 });
+
+router.post('/refresh', [userMiddleware], function(req, res) {
+   let access_token = req.body["access_token"];
+   let refresh_token = req.body["refresh_token"];
+
+   if (access_token == undefined) {
+      res.status(200).send({
+         "Status" : false,
+         "Message": "access_token param is missing"
+      });
+
+      return;
+   }
+
+   if (refresh_token == undefined) {
+      res.status(200).send({
+         "Status" : false,
+         "Message": "refresh_token param is missing"
+      });
+
+      return;
+   }
+
+   access_token = token.refresh(access_token, refresh_token);
+   res.status(200).send({
+      "Status" : true,
+      "Token" : token
+   })
+});
+
+
 
 router.use('/ping', function (req, res) {
    res.status(200).send("ping");

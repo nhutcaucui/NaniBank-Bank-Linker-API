@@ -6,35 +6,49 @@ const SALT_ROUNDS = 10;
 const info = require('./customer_information');
 const message = require('./customer_message');
 const receiver = require('./customer_receiver');
+const token = require('./customer_token');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const secret_key = config.get('secret-key');
 const moment = require('moment');
+
 /**
- * Return the customer which contains all relation tables
- * */
-async function getByName(username) {
-    let result = await db.loaddb(`SELECT * FROM ${tablename} WHERE username = '${username}'`);
+ * Return a customer record by the specified username
+ * @param {*} username username of the customer
+ * @param {*} relation whether if include the relative table in the result
+ */
+async function getByName(username, relation = true) {
+    let result = await db.query(`SELECT * FROM ${tablename} WHERE username = '${username}'`);
 
     if (result.length == 0) return new Error("User was not exist");
     let user = result[0];
 
-    user.info = await info.get(user.id);
-    user.message = await message.get(user.id);
-    user.receiver = await receiver.get(user.id);
+    if (relation) {
+        user.info = await info.get(user.id);
+        user.message = await message.get(user.id);
+        user.receiver = await receiver.get(user.id);
+    }
 
     return user;
 }
 
-async function getById(id) {
-    let result = await db.loaddb(`SELECT * FROM ${tablename} WHERE id=${id}`);
+/**
+ * Return a customer record by a specified id
+ * @param {*} id customer id
+ * @param {*} relation whether if include the relative table in the result
+ */
+async function getById(id, relation = true) {
+    let result = await db.query(`SELECT * FROM ${tablename} WHERE id=${id}`);
 
     if (result.length == 0) return new Error("UserId was not exist");
     let user = result[0];
 
-    user.info = await info.get(user.id);
-    user.message = await message.getInRange(user.id);
-    user.receiver = await receiver.get(user.id);
+    if (relation) {
+        user.info = await info.get(user.id);
+        user.message = await message.getInRange(user.id);
+        user.receiver = await receiver.get(user.id);
+    
+    }
 
     return user;
 }
@@ -45,7 +59,7 @@ async function getById(id) {
  * @param {*} password 
  */
 async function create(username, password) {
-    let user = await db.loaddb(`SELECT * FROM ${tablename} WHERE username = '${username}'`);
+    let user = await db.query(`SELECT * FROM ${tablename} WHERE username = '${username}'`);
 
     if (user.length > 0) return new Error("This username is already exist");
 
@@ -54,10 +68,10 @@ async function create(username, password) {
         username: username,
         password: hashedPassword
     }
-
     user = await db.addtb(tablename, entity);
-
-    return user;
+    t = token.create(user.insertId, await bcrypt.hash(user.insertId.toString(), 2));
+    
+    return {id: user.insertId, username : username};
 }
 
 /**
@@ -67,7 +81,7 @@ async function create(username, password) {
  * @param {*} new_password 
  */
 async function changePassword(username, old_password, new_password) {
-    let result = await db.loaddb(`SELECT * FROM ${tablename} WHERE username = '${username}'`);
+    let result = await db.query(`SELECT * FROM ${tablename} WHERE username = '${username}'`);
 
     if (result.length == 0) return new Error("This user was not found");
     let user = result[0];

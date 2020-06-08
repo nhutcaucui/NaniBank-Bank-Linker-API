@@ -8,13 +8,13 @@ const tablename = "customer_message";
  * @param {*} to the maximum time that the message could be queried
  */
 async function getInRange(id, from, to) {
-    let result = await db.loaddb(`SELECT * FROM ${tablename} WHERE customer_id=${id} AND time >= ${from} AND time <= ${to}`);
+    let result = await db.query(`SELECT * FROM ${tablename} WHERE customer_id=${id} AND time >= ${from} AND time <= ${to}`);
 
     return result;
 }
 
 async function get(id) {
-    let result = await db.loaddb(`SELECT * FROM ${tablename} WHERE customer_id=${id}`);
+    let result = await db.query(`SELECT * FROM ${tablename} WHERE customer_id=${id}`);
     return result;
 }
 /**

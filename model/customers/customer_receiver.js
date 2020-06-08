@@ -6,7 +6,7 @@ const tablename = "customer_receiver";
  * @param {*} id customer id
  */
 async function get(id) {
-    let result = await db.loaddb(`SELECT * FROM ${tablename} WHERE customer_id=${id}`);
+    let result = await db.query(`SELECT * FROM ${tablename} WHERE customer_id=${id}`);
 
     return result;
 }
@@ -35,13 +35,7 @@ async function create(customer_id, receiver, remind_name) {
  * @param {*} receiver account id of the receiver
  */
 async function remove(customer_id, receiver) {
-    let entity = {
-        customer_id: customer_id,
-        // receiver : receiver,
-    };
-
-    console.log(entity);
-    let result = await db.deletetb(tablename, entity);
+    let result = await db.query(`DELETE FROM ${tablename} WHERE customer_id=${customer_id} AND receiver=${receiver}`);
     return result;
 }
 

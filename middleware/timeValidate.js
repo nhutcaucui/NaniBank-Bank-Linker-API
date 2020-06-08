@@ -11,10 +11,8 @@ function timeValidate(req, res, next) {
         return;
     }
     
-    console.log(date);
     let send = moment(date, "X").unix();
     let current = moment().unix();
-    console.log(current);
     let diff = current - send;
     if (diff > limit || diff < -2)
     {

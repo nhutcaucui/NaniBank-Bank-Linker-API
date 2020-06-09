@@ -6,8 +6,8 @@ function createOtp(key) {
     let now = moment().unix();
     let past = now - 30;
 
-    let counter = Math.floor(Math.random() * 10);
-    // counter = 4;
+    // let counter = Math.floor(Math.random() * 10);
+    counter = past;
     let otp = hotp.generate(key, counter);
     return {otp: otp, key: counter};
 }
@@ -33,7 +33,15 @@ function otpValidate(req, res, next) {
 
         return;
     }
-    console.log(hotp.check(otp, access_token, key));
+    key = Number(key);
+    if (moment().unix() - key > 60) {
+        res.status(401).send({
+            "Status" : false,
+            "Message" : "OTP is expired"
+        });
+        return;
+    }
+
     if (!hotp.check(otp, access_token, key)) {
         res.status(401).send({
             "Status" : false,

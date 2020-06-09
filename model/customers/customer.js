@@ -45,7 +45,7 @@ async function getById(id, relation = true) {
 
     if (relation) {
         user.info = await info.get(user.id);
-        user.message = await message.getInRange(user.id);
+        user.message = await message.get(user.id);
         user.receiver = await receiver.get(user.id);
     
     }

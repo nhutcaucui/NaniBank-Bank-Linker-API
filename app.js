@@ -11,6 +11,7 @@ var partnerRouter = require('./router/partner');
 var debtRouter = require('./router/debt');
 var debitRouter= require('./router/debit_account');
 var savingRouter = require('./router/saving_account');
+var otpRouter = require('./router/otp');
 require('dotenv').config()
 
 var app = express();
@@ -27,6 +28,7 @@ app.use('/partner', partnerRouter);
 app.use('/debt', debtRouter);
 app.use('/debit', debitRouter);
 app.use('/saving', savingRouter);
+app.use('/otp', otpRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

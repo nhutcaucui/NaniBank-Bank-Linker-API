@@ -54,7 +54,7 @@ async function charge(id, amount, message = "Charge " + amount  + " to debit acc
     if (result instanceof Error) return result;
 
     let account = result;
-    account.balance += amount;
+    account.balance = Number(amount) + Number(account.balance);
 
     let conditionEntity = {
         id : id
@@ -83,7 +83,7 @@ async function draw(id, amount, message = "Draw " + amount + " from debit accoun
 
     if (balance < amount) return Error("Balance is not enough");
 
-    account.balance -= amount;
+    account.balance = Number(account.balance) - Number(amount);
 
     let conditionEntity = {
         id: id
@@ -124,8 +124,8 @@ async function transfer(fromId, toId, amount, message) {
         return new Error("Balance is not enough");
     }
 
-    fromAccount.balance -= amount;
-    toAccount.balance += amount;
+    fromAccount.balance = Number(fromAccount.balance) - Number(amount);
+    toAccount.balance = Number(fromAccount.balance) + Number(amount);
 
     db.updatetb(tablename, {id : fromAccount.id}, {balance: fromAccount.balance});
     db.updatetb(tablename, {id : toAccount.id}, {balance: toAccount.balance});

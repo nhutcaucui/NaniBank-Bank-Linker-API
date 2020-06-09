@@ -45,7 +45,7 @@ async function charge(id, amount) {
     if (result.length == 0) return new Error("Id was not found");
 
     let account = result[0];
-    account.balance += amount;
+    account.balance = Number(account.balance) +  Number(amount);
 
     let conditionEntity = {
         id : id
@@ -74,7 +74,7 @@ async function draw(id, amount) {
 
     if (balance < amount) return Error("Balance is not enough");
 
-    account.balance -= amount;
+    account.balance = Number(account.balance) - Number(amount);
 
     let conditionEntity = {
         id: id

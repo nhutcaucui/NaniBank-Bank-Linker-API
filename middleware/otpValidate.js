@@ -1,26 +1,51 @@
-var otps = {};
+const hotp = require('otplib').hotp;
+const authenticator = require('otplib').authenticator;
+const moment = require('moment');
 
 function createOtp(key) {
-    let otp = "";
-    otps.key = otp;
+    let now = moment().unix();
+    let past = now - 30;
 
-    return otp;
+    let counter = Math.floor(Math.random() * 10);
+    // counter = 4;
+    let otp = hotp.generate(key, counter);
+    return {otp: otp, key: counter};
 }
 
 function otpValidate(req, res, next) {
-    let otp = req.body["otp"];
+    let access_token = req.headers["access-token"];
+    let key = req.headers["key"];
+    let otp = req.headers["otp"];
+    
     if (otp == undefined) {
+        res.status(401).send({
+            "Status" : false,
+            "Message" : "otp header is missing"
+        });
+        return;
+    }
+
+    if (key == undefined) {
+        res.status(401).send({
+            "Status" : false,
+            "Message" : "key header is missing"
+        });
+
+        return;
+    }
+    console.log(hotp.check(otp, access_token, key));
+    if (!hotp.check(otp, access_token, key)) {
         res.status(401).send({
             "Status" : false,
             "Message" : "Invalid OTP"
         });
         return;
     }
+
     next();
 }
 
 module.exports = {
-    otps,
     otpValidate,
     createOtp
 }

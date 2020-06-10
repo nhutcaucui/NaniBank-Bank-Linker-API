@@ -1,11 +1,36 @@
 const db = require('../db');
 const tablename = "customer_information";
 
-function get(id) {
-    return db.query(`SELECT * FROM ${tablename} WHERE customer_id = '${id}'`);
+async function get(id) {
+    let result =await db.query(`SELECT * FROM ${tablename} WHERE customer_id =${id}`);
+    if (result instanceof Error) {
+        console.log("[Database]", "get customer information", result.message);
+        return result;
+    }
+
+    if (result.length == 0) {
+        return new Error("Customer information not found:", id);
+    }
+
+    return result[0];
 }
 
+async function create(customer_id, email = "", name = "", phone = "") {
+    let entity = {
+        customer_id : customer_id,
+        email : email,
+        name : name, 
+        phone : phone,
+    };
+    let result = await db.addtb(tablename, entity);
+    if (result instanceof Error) {
+        console.log(result);
+    }
+
+    return result;
+}
 
 module.exports = {
-    get
+    get,
+    create
 }

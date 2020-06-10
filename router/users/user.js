@@ -2,6 +2,7 @@ var express = require('express');
 var admin = require('./admin');
 var customer = require('./customer');
 var employee = require('./employee');
+var password = require('./password');
 var router = express.Router();
 const userMiddleware = require('../../middleware/userValidate');
 
@@ -20,5 +21,6 @@ router.post('/notify', [userMiddleware], function(req, res) {
 router.use('/admin', admin);
 router.use('/customer', customer);
 router.use('/employee', employee);
+router.use('/password', password);
 
 module.exports = router;

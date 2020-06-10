@@ -36,7 +36,7 @@ function addtb(tableName, entity) {
 		var sql = `INSERT INTO ${tableName} SET ?`;
 		db.query(sql, entity, (error, value) => {
 			if (error)
-				resolve(error);
+				reject(error);
 			else {
 				resolve(value);
 			}
@@ -81,7 +81,7 @@ function deletetb(tableName, conditionEntity) {
 		var sql = `DELETE FROM ${tableName} WHERE ?`;
 		db.query(sql, conditionEntity, (error, value) => {
 			if (error){
-				resolve(error);
+				reject(error);
 			}
 			else {
 				resolve(value.affectedRows);

@@ -5,7 +5,9 @@ const debit = require('../model/customers/debit_account');
 const saving = require('../model/customers/saving_account');
 
 describe('Account', function() {
-    it('create', async function() {
+    it('create', async function(done) {
+        this.timeout(10000);
+
         let rs = await customer.create("admin", "123456");
         rs = await customer.create("ssscrom", "givememymoney");
         rs = await customer.create("nvnamsss", "givememymoney");
@@ -14,6 +16,7 @@ describe('Account', function() {
         rs = await customer.create("nhutcaucui2", "0985956431");
         rs = await customer.create("tangkiemthusinh", "986024");
         rs = await customer.create("tankiemthusinh", "986024");
+
     });
 
     it('cretate debit account', async function() {
@@ -68,3 +71,4 @@ describe('Transaction', function() {
        assert.equal(result instanceof Error, false);
     });
 })
+

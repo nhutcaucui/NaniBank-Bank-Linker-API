@@ -17,6 +17,12 @@ function otpValidate(req, res, next) {
     let key = req.headers["key"];
     let otp = req.headers["otp"];
     
+    if (access_token == undefined) {
+        res.status(401).send({
+            "Status" : false,
+            "Message" : "access-token header is missing"
+        });
+    }
     if (otp == undefined) {
         res.status(401).send({
             "Status" : false,

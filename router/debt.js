@@ -126,7 +126,6 @@ router.post('/pay', [userMiddleware], async function(req, res) {
 
     let creditor = await customer.getById(debt_record.creditor);
     let debtor = await customer.getById(debt_record.debtor);
-
     let result = await debit.transfer(debtor.debit.id, creditor.debit.id, debt_record.amount, 4, "Pay the debt " + debt_record.name);
 
     if (result instanceof Error) {

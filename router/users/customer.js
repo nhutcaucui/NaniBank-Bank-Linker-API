@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const customer = require('../../model/customers/customer');
+const info = require('../../model/customers/customer_information');
 const receiver = require('../../model/customers/customer_receiver');
 const debit = require('../../model/customers/debit_account');
 const token = require('../../model/customers/customer_token');
@@ -37,7 +38,7 @@ router.get('/', [userMiddleware], async function (req, res) {
    });
 });
 
-router.post('/', async function(req, res) {
+router.post('/', async function (req, res) {
    let username = req.body["username"];
    let password = req.body["password"];
 
@@ -61,17 +62,17 @@ router.post('/', async function(req, res) {
    let result = await customer.create(username, password);
    if (result instanceof Error) {
       res.status(200).send({
-         "Status" : false,
-         "Message" : result.message
+         "Status": false,
+         "Message": result.message
       });
 
       return;
    }
 
    res.status(200).send({
-      "Status" : true,
-      "Message" : "Create new customer successfully",
-      "User" : result
+      "Status": true,
+      "Message": "Create new customer successfully",
+      "User": result
    });
 });
 
@@ -96,10 +97,10 @@ router.post('/login', async function (req, res) {
    }
 
    let result = await customer.login(username, password);
-   if ( result instanceof Error) {
+   if (result instanceof Error) {
       res.status(200).send({
-         "Status" : false,
-         "Message" : result.message
+         "Status": false,
+         "Message": result.message
       });
       return;
    }
@@ -133,8 +134,8 @@ router.post('/receiver/', [userMiddleware], async function (req, res) {
 
    if (customer_id == undefined) {
       res.status(200).send({
-         "Status" : false,
-         "Message" : "customer_id param is missing"
+         "Status": false,
+         "Message": "customer_id param is missing"
       });
 
       return;
@@ -142,8 +143,8 @@ router.post('/receiver/', [userMiddleware], async function (req, res) {
 
    if (rcver == undefined) {
       res.status(200).send({
-         "Status" : false,
-         "Message" : "receiver param is missing"
+         "Status": false,
+         "Message": "receiver param is missing"
       });
 
       return;
@@ -151,8 +152,8 @@ router.post('/receiver/', [userMiddleware], async function (req, res) {
 
    if (remind_name == undefined) {
       res.status(200).send({
-         "Status" : false,
-         "Message" : "remind_name param is missing"
+         "Status": false,
+         "Message": "remind_name param is missing"
       });
 
       return;
@@ -160,10 +161,10 @@ router.post('/receiver/', [userMiddleware], async function (req, res) {
 
    let result = await receiver.create(customer_id, rcver, remind_name);
 
-   if (result instanceof Error ) {
+   if (result instanceof Error) {
       res.status(200).send({
-         "Status" : false,
-         "Message" : result.message
+         "Status": false,
+         "Message": result.message
       });
 
       return;
@@ -172,30 +173,30 @@ router.post('/receiver/', [userMiddleware], async function (req, res) {
    res.status(200).send({
       "Status": true,
       "Message": "Adding new receiver successfully",
-      "Receiver" : result
+      "Receiver": result
    });
 });
 
 /**
  * Add a debit account as an receiver
  */
-router.get('/receiver', [userMiddleware], async function (req, res) { 
+router.get('/receiver', [userMiddleware], async function (req, res) {
    let customer_id = req.query["customer_id"];
    if (customer_id == undefined) {
       res.status(200).send({
-         "Status" : false,
-         "Message" : "customer_id param is missing"
+         "Status": false,
+         "Message": "customer_id param is missing"
       });
 
       return;
    }
-   
+
    let result = await receiver.get(customer_id);
 
    if (result instanceof Error) {
       res.status(200).send({
-         "Status" :false,
-         "Messsage" : result.message
+         "Status": false,
+         "Messsage": result.message
       });
 
       return;
@@ -203,20 +204,20 @@ router.get('/receiver', [userMiddleware], async function (req, res) {
 
 
    res.status(200).send({
-      "Status" : true,
-      "Message" : "",
-      "Receiver" : result
+      "Status": true,
+      "Message": "",
+      "Receiver": result
    });
 });
 
 router.delete('/receiver', [userMiddleware], async function (req, res) {
    let customer_id = req.body["customer_id"];
-   let rcver = req.body["receiver"];  
+   let rcver = req.body["receiver"];
 
    if (customer_id == undefined) {
       res.status(200).send({
-         "Status" : false,
-         "Message" : "customer_id param is missing"
+         "Status": false,
+         "Message": "customer_id param is missing"
       });
 
       return;
@@ -224,37 +225,37 @@ router.delete('/receiver', [userMiddleware], async function (req, res) {
 
    if (rcver == undefined) {
       res.status(200).send({
-         "Status" : false,
-         "Message" : "receiver param is missing"
+         "Status": false,
+         "Message": "receiver param is missing"
       });
 
       return;
    }
 
    let result = await receiver.remove(customer_id, rcver);
-   
+
    if (result instanceof Error) {
       res.status(200).send({
-         "Status" : false,
-         "Message" : result.message
+         "Status": false,
+         "Message": result.message
       });
 
       return;
    }
 
    res.status(200).send({
-      "Status" : true,
-      "Message" : "Removing receiver successfully"
+      "Status": true,
+      "Message": "Removing receiver successfully"
    });
 });
 
-router.post('/refresh', [userMiddleware], function(req, res) {
+router.post('/refresh', [userMiddleware], function (req, res) {
    let access_token = req.body["access_token"];
    let refresh_token = req.body["refresh_token"];
 
    if (access_token == undefined) {
       res.status(200).send({
-         "Status" : false,
+         "Status": false,
          "Message": "access_token param is missing"
       });
 
@@ -263,7 +264,7 @@ router.post('/refresh', [userMiddleware], function(req, res) {
 
    if (refresh_token == undefined) {
       res.status(200).send({
-         "Status" : false,
+         "Status": false,
          "Message": "refresh_token param is missing"
       });
 
@@ -272,12 +273,30 @@ router.post('/refresh', [userMiddleware], function(req, res) {
 
    access_token = token.refresh(access_token, refresh_token);
    res.status(200).send({
-      "Status" : true,
-      "Token" : token
+      "Status": true,
+      "Token": token
    })
 });
 
+router.post('/info', [userMiddleware], async function (req, res) {
+   let customer_id = req.body["customer_id"];
+   let email = req.body["email"];
+   let name = req.body["name"];
+   if (customer_id == undefined) {
+      res.status(200).send({
+         "Status": false,
+         "Message": "customer_id param is missing"
+      });
+      return;
+   }
 
+   let result = await info.update(customer_id, email, name);
+   
+   res.status(200).send({
+      "Status" : true,
+      "Message" : "Update information successfully"
+   })
+});
 
 router.use('/ping', function (req, res) {
    res.status(200).send("ping");

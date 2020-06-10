@@ -248,27 +248,6 @@ router.delete('/receiver', [userMiddleware], async function (req, res) {
    });
 });
 
-router.get('/debt', [userMiddleware], function (req, res) {
-   res.status(200).send({
-      "Status": true,
-      "Message": "",
-   });
-});
-
-router.post('/debt', [userMiddleware], function (req, res) {
-   res.status(200).send({
-      "Status": true,
-      "Message": "",
-   });
-});
-
-router.delete('/debt', [userMiddleware], function (req, res) {
-   res.status(200).send({
-      "Status": true,
-      "Message": "",
-   });
-});
-
 router.post('/refresh', [userMiddleware], function(req, res) {
    let access_token = req.body["access_token"];
    let refresh_token = req.body["refresh_token"];

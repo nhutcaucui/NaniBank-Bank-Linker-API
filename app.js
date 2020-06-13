@@ -4,8 +4,13 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var cors = require('cors');
+//var cors = require('cors');
 
+//cors for browser can call the API
+const cors = {
+  origin: ["http://localhost:8080","http://192.168.1.6:8080","www.lam.com","www.nguyen.com"],
+  default: "http://localhost:8080/"
+}
 
 var timeValidateMiddleware = require('./middleware/timeValidate');
 var transactionRouter = require('./router/transaction');
@@ -18,7 +23,13 @@ var otpRouter = require('./router/otp');
 require('dotenv').config()
 
 var app = express();
-app.use(cors());
+//app.use(cors());
+app.all('*', function(req, res, next) {
+  var origin = cors.origin.indexOf(req.header('origin').toLowerCase()) > -1 ? req.headers.origin : cors.default;
+  res.header("Access-Control-Allow-Origin", origin);
+  res.header("Access-Control-Allow-Headers", '*');
+  next();
+});
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -34,18 +45,7 @@ app.use('/debit', debitRouter);
 app.use('/saving', savingRouter);
 app.use('/otp', otpRouter);
 
-//cors for browser can call the API
-// const cors = {
-//   origin: ["http://localhost:8080/","www.lam.com","www.nguyen.com"],
-//   default: "http://localhost:8080/"
-// }
 
-// app.all('*', function(req, res, next) {
-//   var origin = cors.origin.indexOf(req.header('origin').toLowerCase()) > -1 ? req.headers.origin : cors.default;
-//   res.header("Access-Control-Allow-Origin", origin);
-//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//   next();
-// });
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

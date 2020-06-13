@@ -4,6 +4,9 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+var cors = require('cors');
+
+
 var timeValidateMiddleware = require('./middleware/timeValidate');
 var transactionRouter = require('./router/transaction');
 var usersRouter = require('./router/users/user');
@@ -15,6 +18,7 @@ var otpRouter = require('./router/otp');
 require('dotenv').config()
 
 var app = express();
+app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -42,9 +46,6 @@ app.use('/otp', otpRouter);
 //   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 //   next();
 // });
-
-var cors = require('cors');
-app.use(cors());
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

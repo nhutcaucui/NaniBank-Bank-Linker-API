@@ -29,6 +29,20 @@ app.use('/debt', debtRouter);
 app.use('/debit', debitRouter);
 app.use('/saving', savingRouter);
 app.use('/otp', otpRouter);
+
+//cors for browser can call the API
+const cors = {
+  origin: ["http://localhost:8080/","www.lam.com","www.nguyen.com"],
+  default: "http://localhost:8080/"
+}
+
+app.all('*', function(req, res, next) {
+  var origin = cors.origin.indexOf(req.header('origin').toLowerCase()) > -1 ? req.headers.origin : cors.default;
+  res.header("Access-Control-Allow-Origin", origin);
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

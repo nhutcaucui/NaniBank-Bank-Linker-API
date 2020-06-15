@@ -74,6 +74,31 @@ router.post('/create', [userMiddleware], async function(req, res) {
    });
 });
 
+router.delete('/', [userMiddleware], async function(req, res) {
+   let username = req.body["username"];
+   if (username == undefined) {
+      res.status(200).send({
+         "Status" : false,
+         "Message" : "username param is missing"
+      });
+      return;
+   }
+
+   let result = await employees.remove(username);
+   if (result instanceof Error) {
+      res.status(200).send({
+         "Status" : false,
+         "Message" : result.message
+      });
+
+      return;
+   }
+
+   res.status(200).send({
+      "Status":true,
+      "Message" : "Delete account successfully"
+   })
+});
 
 router.use('/ping', function (req, res) {
    res.status(200).send("ping"); 

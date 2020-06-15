@@ -38,6 +38,15 @@ async function create(username, password) {
     return {id: user.insertId, username : username};
 }
 
+async function remove(username) {
+    let result = await getByName(username);
+    if (result instanceof Error) return result;
+    let entity = {
+        username: username
+    }
+    return await db.deletetb(tablename, entity);
+}
+
 async function login(username, password) {
     let result = await getByName(username);
     if (result instanceof Error) return new Error("Username or password does not match");
@@ -59,5 +68,6 @@ module.exports = {
     getById,
     getByName,
     create,
+    remove,
     login
 }

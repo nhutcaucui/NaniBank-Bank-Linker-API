@@ -113,20 +113,6 @@ router.post('/login', async function (req, res) {
    });
 });
 
-router.use('/get', function (req, res) {
-
-});
-
-router.get('/list', [userMiddleware], function (req, res) {
-   let list = "";
-
-   res.status(200).send({
-      "Status": true,
-      "Message": "",
-      list,
-   });
-});
-
 router.post('/receiver/', [userMiddleware], async function (req, res) {
    let customer_id = req.body["customer_id"];
    let rcver = req.body["receiver"];

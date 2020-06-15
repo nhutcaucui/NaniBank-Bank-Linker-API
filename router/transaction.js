@@ -4,7 +4,7 @@ var router = express.Router();
 const debit = require('../model/customers/debit_account');
 const userMiddleware = require('../middleware/userValidate');
 const otpMiddleware = require('../middleware/otpValidate').otpValidate;
-const history = require('../model/transaction_history');
+const histories = require('../model/transaction_history');
 
 router.post('/charge', [userMiddleware, otpMiddleware], async function (req, res) {
 	let id = req.body["id"];

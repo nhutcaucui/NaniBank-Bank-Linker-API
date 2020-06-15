@@ -73,7 +73,7 @@ router.post('/reset', [otpMiddleware], async function(req, res) {
 
     res.status(200).send({
         "Status" : true,
-        "Message" : result
+        "Message" : "Reset password successfully"
     });
 });
 

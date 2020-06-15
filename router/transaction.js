@@ -116,7 +116,7 @@ router.post('/transfer', [userMiddleware, otpMiddleware], async function(req, re
 	});
 });
 
-router.get('/history', [userMiddleware, otpMiddleware], async function (req, res) {
+router.get('/history', [userMiddleware], async function (req, res) {
 	let id = req.query["id"];
 	let filter = req.query["filter"] == undefined ? "both" : req.query["filter"];
 	let receiverHistories;

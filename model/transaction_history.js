@@ -14,7 +14,7 @@ function get(id) {
  * @param {*} type type of transaction
  */
 async function getByType(type) {
-    return await db.query(`SELECt * FROm ${tablename} WHERE type=${type}`);
+    return await db.query(`SELECt * FROM ${tablename} WHERE type=${type}`);
 }
 
 /**
@@ -41,7 +41,7 @@ async function create(from, to, amount, type, message) {
 
 /**
  * Return the histories that related to the specified receiver
- * @param {*} id customer id of the receiver
+ * @param {*} id account id of the receiver
  */
 async function receiverHistory(id) {
     let receiver = await db.loaddb(`SELECT * FROM ${tablename} WHERE from_account = ${id}`);
@@ -50,7 +50,7 @@ async function receiverHistory(id) {
 
 /**
  * Return the histories that related to the specified sender
- * @param {*} id customer id of the sender
+ * @param {*} id account id of the sender
  */
 async function senderHistory(id) {
     let sender = await db.loaddb(`SELECT * FROM ${tablename} WHERE to_account = ${id}`);

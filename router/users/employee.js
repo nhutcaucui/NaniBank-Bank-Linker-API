@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const employees = require('../../model/employee');
+const userMiddleware = require('../../middleware/userValidate');
 router.post('/login', async function (req, res) {
    let username = req.body["username"];
    let password = req.body["password"];
@@ -38,7 +39,7 @@ router.post('/login', async function (req, res) {
    });
 });
 
-router.post('/create', [userMiddleware], async function(req, res) {
+router.post('/create', async function(req, res) {
    let username = req.body["username"];
    let password = req.body["password"];
 

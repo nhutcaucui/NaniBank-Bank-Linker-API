@@ -41,6 +41,9 @@ router.get('/', [userMiddleware], async function (req, res) {
 router.post('/', async function (req, res) {
    let username = req.body["username"];
    let password = req.body["password"];
+   let name = req.body["name"];
+   let email = req.body["email"];
+   let phone = req.body["phone"];
 
    if (username == undefined) {
       res.status(200).send({
@@ -57,6 +60,46 @@ router.post('/', async function (req, res) {
          "Message": "password param is missing"
       });
       return;
+   }
+
+   if (name == undefined) {
+      res.status(200).send({
+         "Status": false,
+         "Message": "name param is missing"
+      });
+      return;
+   }
+
+   if (email == undefined) {
+      res.status(200).send({
+         "Status": false,
+         "Message": "email param is missing"
+      });
+      return;
+   } else {
+      let match = email.match(/^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$/);
+      if (match == null) {
+         res.status(200).send({
+            "Status": false,
+            "Message": "email param is invalid"
+         });
+      }
+   }
+
+   if (phone == undefined) {
+      res.status(200).send({
+         "Status": false,
+         "Message": "phone param is missing"
+      });
+      return;
+   } else {
+      let match = phone.match(/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/);
+      if (match == null) {
+         res.status(200).send({
+            "Status": false,
+            "Message": "phone param is invalid"
+         });
+      }
    }
 
    let result = await customer.create(username, password);

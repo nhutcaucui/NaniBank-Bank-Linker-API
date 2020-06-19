@@ -80,9 +80,9 @@ router.post('/reset', [otpMiddleware], async function(req, res) {
 router.post('/change', [userMiddleware], async function(req, res) {
     let old_password = req.body["old_password"];
     let new_password = req.body["new_password"];
-    let id = req.body["id"];
+    let username = req.body["username"];
 
-    let result = await customers.changePassword(id, old_password, new_password);
+    let result = await customers.changePassword(username, old_password, new_password);
     if (result instanceof Error) {
         res.status(200).send({
             "Status" : false,

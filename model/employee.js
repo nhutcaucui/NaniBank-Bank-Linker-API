@@ -1,5 +1,7 @@
 const db = require('./db');
 const tablename = "employee";
+const bcrypt = require('bcryptjs');
+const SALT_ROUNDS = 10;
 
 async function getById(id) {
     let result = await db.query(`SELECT * FROM ${tablename} WHERE username = '${username}`);

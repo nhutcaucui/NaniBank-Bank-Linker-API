@@ -9,7 +9,7 @@ const customer = require('../model/customers/customer');
 router.get('/create', [userMiddleware], async function(req, res) {
     let access_token = req.headers["access-token"];
     let pack = createOtp(access_token);
-    let id = req.body["customer_id"];
+    let id = req.query["customer_id"];
 
     if (id == undefined) {
         res.status(200).send({

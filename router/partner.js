@@ -9,35 +9,35 @@ const debitAccount = require('../model/customers/debit_account');
 const info = require('../model/customers/customer_information');
 const partner_history = require('../model/partner_transaction_history');
 
-router.get('/key', [userMiddleware], async function(req, res) {
+router.get('/key', [userMiddleware], async function (req, res) {
     let partner_name = req.query["partner_name"]
     if (partner_name == undefined) {
-         res.status(200).send({
-             "Status" : false,
-             "Message" : "partner_name param is missing"
-         });
-         return;
+        res.status(200).send({
+            "Status": false,
+            "Message": "partner_name param is missing"
+        });
+        return;
     }
 
     let result = await partners.name(partner_name);
     if (result instanceof Error) {
         res.status(200).send({
             "Status": false,
-            "Message" : result.message
+            "Message": result.message
         });
         return;
     }
     let partner = result[0];
     res.status(200).send({
-        "Status" : true,
-        "Message" : "",
-        "Key" : partner.publicKey
+        "Status": true,
+        "Message": "",
+        "Key": partner.publicKey
     });
-}); 
+});
 
 router.post('/add', async function (req, res) {
-   var name = req.body["name"];
-    if(name == undefined){
+    var name = req.body["name"];
+    if (name == undefined) {
         res.status(200).send({
             "status": false,
             "message": "Yo dawg you don't have a name?"
@@ -60,8 +60,8 @@ router.post('/add', async function (req, res) {
         });
     }
 
-    var success = await partners.add(name,publicKey,hashMethod);
-    if(!success){
+    var success = await partners.add(name, publicKey, hashMethod);
+    if (!success) {
         res.status(200).send({
             "status": false,
             "message": "database error"
@@ -77,42 +77,42 @@ router.post('/add', async function (req, res) {
 });
 
 router.post('/transfer', [hashMiddleware, partnerMiddleware, verify], async function (req, res) {
-	let id = req.body["id"];
-	if(id == undefined){
-		res.status(200).send({
-			"status": false,
-			"message": "id is missing",
-		});
-	}
+    let id = req.body["id"];
+    if (id == undefined) {
+        res.status(200).send({
+            "status": false,
+            "message": "id is missing",
+        });
+    }
 
-	let amount = req.body["amount"];
-	if(amount == undefined){
-		res.status(200).send({
-			"status": false,
-			"message": "amount is missing",
-		});
-	}
+    let amount = req.body["amount"];
+    if (amount == undefined) {
+        res.status(200).send({
+            "status": false,
+            "message": "amount is missing",
+        });
+    }
 
-	let signature = pgp.sign("hi mom");
+    let signature = pgp.sign("hi mom");
 
-	debit.addBalance(id, amount)
-	var p = await debit.getId(id);
+    debit.addBalance(id, amount)
+    var p = await debit.getId(id);
 
-	var ret = {
-		"status": true,
-		"message": "Transfer money successfully",
-		"signature": signature
-	}
+    var ret = {
+        "status": true,
+        "message": "Transfer money successfully",
+        "signature": signature
+    }
 
-	res.status(200).send(ret);
+    res.status(200).send(ret);
 });
 
-router.get('/', [hashMiddleware, partnerMiddleware, verify], async function(req, res) {
+router.get('/', [hashMiddleware, partnerMiddleware, verify], async function (req, res) {
     let id = req.query["id"];
-    if ( id == undefined) {
+    if (id == undefined) {
         res.status(200).send({
-            "Status" : false,
-            "Message" : "id param is missing"
+            "Status": false,
+            "Message": "id param is missing"
         });
 
         return;
@@ -121,43 +121,43 @@ router.get('/', [hashMiddleware, partnerMiddleware, verify], async function(req,
     let result = await info.get(id);
     if (result instanceof Error) {
         res.status(200).send({
-            "Status" : false,
-            "Message" : result.message
+            "Status": false,
+            "Message": result.message
         });
 
         return;
     }
-    
+
     res.status(200).send({
-        "Status" : true, 
-        "Info" : info.name,
+        "Status": true,
+        "Info": info.name,
     });
 });
 
-router.get('/history', [], async function(req, res) {
+router.get('/history', [], async function (req, res) {
     let partner_id = req.query["parter_id"];
     let from = req.query["from"];
     let to = req.query["to"];
     if (partner_id == undefined) {
         res.status(200).send({
-            "Status" : false,
-            "Message" : "partner_id param is missing"
+            "Status": false,
+            "Message": "partner_id param is missing"
         });
         return;
     }
 
     if (from == undefined) {
         res.status(200).send({
-            "Status" : false,
-            "Message" : "from param is missing"
+            "Status": false,
+            "Message": "from param is missing"
         });
         return;
     }
 
     if (to == undefined) {
         res.status(200).send({
-            "Status" : false,
-            "Message" : "to param is missing"
+            "Status": false,
+            "Message": "to param is missing"
         });
         return;
     }
@@ -166,25 +166,25 @@ router.get('/history', [], async function(req, res) {
 
     if (result instanceof Error) {
         res.status(200).send({
-            "Status" : false,
-            "Message" : result.message
+            "Status": false,
+            "Message": result.message
         });
         return;
     }
 
     res.status(200).send({
-        "Status" : false,
-        "Message" : "Get history successfully",
-        "Histories" : result
+        "Status": false,
+        "Message": "Get history successfully",
+        "Histories": result
     });
 })
 
-router.get('/statistic', [userMiddleware], async function(req, res) {
+router.get('/statistic', [userMiddleware], async function (req, res) {
     let partner_id = req.query["partner_id"];
     if (partner_id == undefined) {
         res.status(200).send({
             "Status": false,
-            "Message" : "partner_id param is missing"
+            "Message": "partner_id param is missing"
         });
 
         return;
@@ -193,17 +193,17 @@ router.get('/statistic', [userMiddleware], async function(req, res) {
     let result = await partner_history.statistic(partner_id);
     if (result instanceof Error) {
         res.status(200).send({
-            "Status" : false,
-            "Message" : result.message
+            "Status": false,
+            "Message": result.message
         });
 
         return;
     }
 
     res.status(200).send({
-        "Status" : true,
-        "Message" : "Statistic successfully",
-        "Result" : result
+        "Status": true,
+        "Message": "Statistic successfully",
+        "Result": result
     });
 });
 

@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const partner = require('../model/partner');
+const partners = require('../model/partner');
 const partnerMiddleware = require('../middleware/partnerValidate');
 const userMiddleware = require('../middleware/userValidate');
 const hashMiddleware = require('../middleware/hashValidate');
@@ -8,6 +8,32 @@ const verify = require('../middleware/verify');
 const debitAccount = require('../model/customers/debit_account');
 const info = require('../model/customers/customer_information');
 const partner_history = require('../model/partner_transaction_history');
+
+router.get('/key', [userMiddleware], async function(req, res) {
+    let partner_name = req.query["partner_name"]
+    if (partner_name == undefined) {
+         res.status(200).send({
+             "Status" : false,
+             "Message" : "partner_name param is missing"
+         });
+         return;
+    }
+
+    let result = await partners.name(partner_name);
+    if (result instanceof Error) {
+        res.status(200).send({
+            "Status": false,
+            "Message" : result.message
+        });
+        return;
+    }
+    let partner = result[0];
+    res.status(200).send({
+        "Status" : true,
+        "Message" : "",
+        "Key" : partner.publicKey
+    });
+}); 
 
 router.post('/add', async function (req, res) {
    var name = req.body["name"];
@@ -34,7 +60,7 @@ router.post('/add', async function (req, res) {
         });
     }
 
-    var success = await partner.add(name,publicKey,hashMethod);
+    var success = await partners.add(name,publicKey,hashMethod);
     if(!success){
         res.status(200).send({
             "status": false,
@@ -75,7 +101,6 @@ router.post('/transfer', [hashMiddleware, partnerMiddleware, verify], async func
 	var ret = {
 		"status": true,
 		"message": "Transfer money successfully",
-		"balance": p[0]["balance"],
 		"signature": signature
 	}
 
@@ -94,10 +119,18 @@ router.get('/', [hashMiddleware, partnerMiddleware, verify], async function(req,
     }
 
     let result = await info.get(id);
+    if (result instanceof Error) {
+        res.status(200).send({
+            "Status" : false,
+            "Message" : result.message
+        });
 
+        return;
+    }
+    
     res.status(200).send({
         "Status" : true, 
-        "Info" : info,
+        "Info" : info.name,
     });
 });
 

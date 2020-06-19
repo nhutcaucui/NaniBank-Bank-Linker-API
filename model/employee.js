@@ -2,9 +2,13 @@ const db = require('./db');
 const tablename = "employee";
 const bcrypt = require('bcryptjs');
 const SALT_ROUNDS = 10;
+const moment=require('moment');
+const jwt = require('jsonwebtoken');
+const config = require('config');
+const secret_key = config.get('secret-key');
 
 async function getById(id) {
-    let result = await db.query(`SELECT * FROM ${tablename} WHERE username = '${username}`);
+    let result = await db.query(`SELECT * FROM ${tablename} WHERE username = '${username}'`);
     if (result.length == 0) {
         return new Error("Id was not found");
     }
@@ -13,7 +17,7 @@ async function getById(id) {
 }
 
 async function getByName(username) {
-    let result = await db.query(`SELECT * FROM ${tablename} WHERE username = '${username}`);
+    let result = await db.query(`SELECT * FROM ${tablename} WHERE username = '${username}'`);
     if (result.length == 0) {
         return new Error("Username was not found");
     }
@@ -54,10 +58,10 @@ async function login(username, password) {
     if (result instanceof Error) return new Error("Username or password does not match");
     let employee = result;
 
-    if (constraint) {
-        let match = bcrypt.compare(password, employee.password);
+    //if (constraint) {
+        let match = await bcrypt.compare(password, employee.password);
         if (!match) return new Error("Username or password does not match");
-    }
+    //}
 
     let token = jwt.sign({id: employee.id, exp: moment().add(15, "minutes").unix()}, secret_key);
     return {token : token, customer : {

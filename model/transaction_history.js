@@ -39,12 +39,17 @@ async function create(from, to, amount, type, message) {
     return await db.addtb(tablename, entity);
 }
 
+async function all() {
+    let result = await db.query(`SELECT * FROM ${tablename}`);
+    return result;
+}
+
 /**
  * Return the histories that related to the specified receiver
  * @param {*} id account id of the receiver
  */
 async function receiverHistory(id) {
-    let receiver = await db.loaddb(`SELECT * FROM ${tablename} WHERE from_account = ${id}`);
+    let receiver = await db.query(`SELECT * FROM ${tablename} WHERE from_account = ${id}`);
     return receiver;
 }
 
@@ -53,11 +58,12 @@ async function receiverHistory(id) {
  * @param {*} id account id of the sender
  */
 async function senderHistory(id) {
-    let sender = await db.loaddb(`SELECT * FROM ${tablename} WHERE to_account = ${id}`);
+    let sender = await db.query(`SELECT * FROM ${tablename} WHERE to_account = ${id}`);
     return sender;
 }
 
 module.exports = {
+    all,
     get,
     getByType,
     create,

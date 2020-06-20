@@ -116,6 +116,23 @@ router.post('/transfer', [userMiddleware, otpMiddleware], async function(req, re
 	});
 });
 
+router.get('/history/all', [userMiddleware], async function(req, res) {
+	let result = await histories.all();
+	if (result instanceof Error) {
+		res.status(200).send({
+			"Stauts" : false,
+			"Message" : result.message
+		});
+		return;
+	}
+
+	res.status(200).send({
+		"Status" : true,
+		"Message" : "",
+		"Histories" : result
+	});
+});
+
 router.get('/history', [userMiddleware], async function (req, res) {
 	let id = req.query["id"];
 	let filter = req.query["filter"] == undefined ? "both" : req.query["filter"];

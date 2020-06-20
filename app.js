@@ -25,7 +25,15 @@ require('dotenv').config()
 var app = express();
 //app.use(cors());
 app.all('*', function(req, res, next) {
-  var origin = cors.origin.indexOf(req.header('origin').toLowerCase()) > -1 ? req.headers.origin : cors.default;
+  let origin = req.header('origin');
+  if (origin == undefined) {
+    res.status(200).send( {
+      "Status" : false,
+      "Message": "origin header is missing"
+    });
+    return;
+  }
+  origin = cors.origin.indexOf(origin.toLowerCase()) > -1 ? req.headers.origin : cors.default;
   res.header("Access-Control-Allow-Origin", origin);
   res.header("Access-Control-Allow-Headers", '*');
   next();

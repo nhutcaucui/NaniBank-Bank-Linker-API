@@ -8,7 +8,7 @@ var logger = require('morgan');
 
 //cors for browser can call the API
 const cors = {
-  origin: ["http://localhost:8080","http://192.168.1.6:8080","www.lam.com","www.nguyen.com"],
+  origin: ["http://localhost:8080","http://192.168.1.6:8080","www.lam.com","www.nguyen.com","www.nanibank.com"],
   default: "http://localhost:8080/"
 }
 

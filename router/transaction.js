@@ -6,7 +6,7 @@ const userMiddleware = require('../middleware/userValidate');
 const otpMiddleware = require('../middleware/otpValidate').otpValidate;
 const histories = require('../model/transaction_history');
 
-router.post('/charge', [userMiddleware, otpMiddleware], async function (req, res) {
+router.post('/charge', [userMiddleware], async function (req, res) {
 	let id = req.body["id"];
 	let amount = req.body["amount"];
 
@@ -45,7 +45,7 @@ router.post('/charge', [userMiddleware, otpMiddleware], async function (req, res
 
 });
 
-router.post('/draw', [userMiddleware, otpMiddleware], async function (req, res) {
+router.post('/draw', [userMiddleware], async function (req, res) {
 	let id = req.body["id"];
 	let amount = req.body["amount"];
 
@@ -138,7 +138,7 @@ router.get('/history', [userMiddleware], async function (req, res) {
 	let filter = req.query["filter"] == undefined ? "both" : req.query["filter"];
 	let receiverHistories;
 	let senderHistories;
-
+	
 	if (id == undefined) {
 		res.status(200).send({
 			"Status": false,

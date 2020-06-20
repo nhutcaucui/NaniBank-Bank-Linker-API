@@ -13,9 +13,9 @@ router.get('/', function (req, res, next) {
     res.status(200).send('good morning');
 });
 
-router.get('/login', async function(req, res) {
+router.post('/login', async function(req, res) {
     let username = req.body["username"];
-    let password = reqbody["password"];
+    let password = req.body["password"];
 
     if (username == undefined) {
         res.status(200).send({
@@ -27,12 +27,13 @@ router.get('/login', async function(req, res) {
     if (password == undefined) {
         res.status(200).send({
             "Status" : false,
-            "Message" : "username param is missing"
+            "Message" : "password param is missing"
         });
         return;
     }
 
-    let result = customers.login(username, password);
+    let result = await customers.login(username, password);
+    console.log("[Customer]", result);
     if (!(result instanceof Error)) {
         res.status(200).send({
             "Status": true,
@@ -44,7 +45,8 @@ router.get('/login', async function(req, res) {
         return;
     }
 
-    result = admins.login(username, password);
+    result = await admins.login(username, password);
+    console.log("[Admin]", result);
     if (!(result instanceof Error)) {
         res.status(200).send({
             "Status": true,
@@ -56,7 +58,8 @@ router.get('/login', async function(req, res) {
         return;
     }
 
-    result = employees.login(username, password);
+    result = await employees.login(username, password);
+    console.log("[Employee]", result);
     if (!(result instanceof Error)) {
         res.status(200).send({
             "Status": true,

@@ -1,5 +1,6 @@
 var moment = require('moment');
-const limit = 10;
+const upperLimit = 10;
+const lowerLimit = -5;
 function timeValidate(req, res, next) {
     let date = req.headers["timestamp"];
     if (date == undefined) {
@@ -14,7 +15,7 @@ function timeValidate(req, res, next) {
     let send = moment(date, "X").unix();
     let current = moment().unix();
     let diff = current - send;
-    if (diff > limit || diff < -2)
+    if (diff > upperLimit || diff < lowerLimit)
     {
         console.log("[Time]", "this request is over", diff, "seconds");
         res.status(200).send({

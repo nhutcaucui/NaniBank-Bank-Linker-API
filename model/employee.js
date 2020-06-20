@@ -60,9 +60,9 @@ async function login(username, password) {
     }
 
     let token = jwt.sign({id: employee.id, exp: moment().add(15, "minutes").unix()}, secret_key);
-    return {token : token, customer : {
+    return {token : token, employee : {
         id: employee.id,
-        customer: employee
+        employee: employee
     }};
 }
 

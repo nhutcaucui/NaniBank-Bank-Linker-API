@@ -51,9 +51,9 @@ async function login(username, password) {
     }
 
     let token = jwt.sign({id: admin.id, exp: moment().add(15, "minutes").unix()}, secret_key);
-    return {token : token, customer : {
+    return {token : token, admin : {
         id: admin.id,
-        customer: admin
+        admin: admin
     }};
 }
 

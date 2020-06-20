@@ -30,8 +30,8 @@ async function create(customer_id, email = "", name = "", phone = "") {
     return result;
 }
 
-async function update(customer_id, email="", name ="") {
-    let result = await db.query(`UPDATE ${tablename} SET email=${email}, name=${name} WHERE customer_id=${customer_id}`);
+async function update(customer_id, email, name, phone) {
+    let result = await db.query(`UPDATE ${tablename} SET email='${email}', name='${name}', phone='${phone}' WHERE customer_id=${customer_id}`);
     return result;
 }
 

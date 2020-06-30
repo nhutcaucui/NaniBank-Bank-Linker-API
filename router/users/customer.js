@@ -99,6 +99,8 @@ router.post('/', async function (req, res) {
             "Status": false,
             "Message": "phone param is invalid"
          });
+
+         return;
       }
    }
 
@@ -109,6 +111,16 @@ router.post('/', async function (req, res) {
          "Message": result.message
       });
 
+      return;
+   }
+
+   console.log(result);
+   let update = await info.update(result.id, email, name, phone);
+   if (update instanceof Error) {
+      res.status(200).send({
+         "Status": false,
+         "Message": result.message
+      });
       return;
    }
 

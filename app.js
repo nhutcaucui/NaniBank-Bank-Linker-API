@@ -36,6 +36,7 @@ app.all('*', function(req, res, next) {
   origin = cors.origin.indexOf(origin.toLowerCase()) > -1 ? req.headers.origin : cors.default;
   res.header("Access-Control-Allow-Origin", origin);
   res.header("Access-Control-Allow-Headers", '*');
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE, PATCH");
   next();
 });
 app.use(logger('dev'));

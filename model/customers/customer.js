@@ -8,6 +8,7 @@ const messages = require('./customer_message');
 const receivers = require('./customer_receiver');
 const debits = require('./debit_account');
 const tokens = require('./customer_token');
+const saves = require('./saving_account');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const secret_key = config.get('secret-key');
@@ -29,6 +30,7 @@ async function getByName(username, relation = true) {
         user.message = await messages.get(user.id);
         user.receiver = await receivers.get(user.id);
         user.debit = await debits.getByCustomerId(user.id);
+        user.saving = await saves.get(user.id);
     }
 
     return user;
@@ -50,17 +52,19 @@ async function getById(id, relation = true) {
         user.message = await messages.get(user.id);
         user.receiver = await receivers.get(user.id);
         user.debit = await debits.getByCustomerId(user.id);
+        user.saving = await saves.get(user.id);
     }
 
     return user;
 }
 
 async function getInfoById(id) {
-    let info = await info.get(id)
-    let message = await message.get(id)
+    let info = await info.get(id);
+    let message = await message.get(id);
     let receiver = await receivers.get(user.id);
-    let debit = await debits.getById(id)
-    return {info, message, receiver, debit}
+    let debit = await debits.getById(id);
+    let saving = await saves.get(id);
+    return {info, message, receiver, debit, saving}
 }
 
 async function getInfoByUsername(username) {

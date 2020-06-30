@@ -2,11 +2,27 @@ const db = require('../db');
 const moment = require('moment');
 const tablename = "saving_account";
 
-async function get(owner) {
+/**
+ * Return saving accounts of a specified user
+ * @param {*} owner id of the owner
+ */
+async function getByOwner(owner) {
     let result = await db.query(`SELECT * FROM ${tablename} WHERE owner = '${owner}'`);
     if (result.length == 0) return Error("This customer does not have any saving account");
 
     return result;
+}
+
+/**
+ * Return a saving account by specified name and owner
+ * @param {*} name 
+ * @param {*} owner 
+ */
+async function get(name, owner) {
+    let result = await db.query(`SELECT * FROM ${tablename} WHERE name='${name}' AND owner='${owner}'`);
+    if (result.length == 0) return Error("This customer does not have any saving account");
+
+    return result[0];
 }
 
 /**
@@ -89,6 +105,7 @@ async function draw(id, amount) {
 
 
 module.exports = {
+    getByOwner,
     get,
     create,
     draw,

@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 const debit = require('../model/customers/debit_account');
 const customer = require('../model/customers/customer');
-const saving = require('../model/customers/saving_account');
+const saves = require('../model/customers/saving_account');
 const userMiddleware = require('../middleware/userValidate');
 
 router.post('/', [userMiddleware], async function(req, res) {
@@ -30,7 +30,7 @@ router.post('/', [userMiddleware], async function(req, res) {
             "Message" : "term param is missing"
         });
     }
-    let result = await saving.create(customer_id, name, term);
+    let result = await saves.create(customer_id, name, term);
     if (result instanceof Error) {
         res.status(200).send({
             "Status" : false,
@@ -45,5 +45,66 @@ router.post('/', [userMiddleware], async function(req, res) {
         "Account" : result
     });
 });
+
+router.get('/', [userMiddleware], async function(req, res) {
+    let name = req.query["name"];
+    let owner = req.query["owner"];
+
+    if (name == undefined) {
+        res.status(200).send({
+            "Status" : false,
+            "Message" : "name param is missing"
+        });
+        return;
+    }
+    if (owner == undefined) {
+        res.status(200).send({
+            "Status" : false,
+            "Message" : "name param is missing"
+        });
+        return;
+    }
+
+    let result = await saves.get(name, owner);
+    if (result instanceof Error) {
+        res.status(200).send({
+            "Status" : false,
+            "Message": result.message
+        });
+        return;
+    }
+
+    res.status(200).send({
+        "Status":true,
+        "Message" : "Get saving account successfully",
+        "Saving": result
+    })
+})
+
+router.get('/s', [userMiddleware], async function(req, res) {
+    let owner = req.query["owner"];
+    if (owner == undefined) {
+        res.status(200).send({
+            "Status" : false,
+            "Message" : "name param is missing"
+        });
+        return;
+    }
+
+    let result = await saves.getByOwner(owner);
+    if (result instanceof Error) {
+        res.status(200).send({
+            "Status" : false,
+            "Message": result.message
+        });
+        return;
+    }
+
+    res.status(200).send({
+        "Status":true,
+        "Message" : "Get saving account successfully",
+        "Saving": result
+    })
+})
 
 module.exports = router;

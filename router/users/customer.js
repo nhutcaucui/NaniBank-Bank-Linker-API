@@ -1,13 +1,14 @@
 var express = require('express');
 var router = express.Router();
-const customer = require('../../model/customers/customer');
-const info = require('../../model/customers/customer_information');
-const receiver = require('../../model/customers/customer_receiver');
-const debit = require('../../model/customers/debit_account');
-const token = require('../../model/customers/customer_token');
+const customers = require('../../model/customers/customer');
+const infos = require('../../model/customers/customer_information');
+const receivers = require('../../model/customers/customer_receiver');
+const debits = require('../../model/customers/debit_account');
+const tokens = require('../../model/customers/customer_token');
 const partnerMiddleware = require('../../middleware/partnerValidate');
 const hashMiddleware = require('../../middleware/hashValidate');
 const userMiddleware = require('../../middleware/userValidate');
+const customer = require('../../model/customers/customer');
 
 router.get('/', [userMiddleware], async function (req, res) {
    var id = req.body["id"];
@@ -20,7 +21,7 @@ router.get('/', [userMiddleware], async function (req, res) {
       return;
    }
 
-   var p = await customer.getByName(id);
+   var p = await customers.getByName(id);
    if (p.length == 0) {
       res.status(200).send({
          "status": false,
@@ -104,7 +105,7 @@ router.post('/', async function (req, res) {
       }
    }
 
-   let result = await customer.create(username, password);
+   let result = await customers.create(username, password);
    if (result instanceof Error) {
       res.status(200).send({
          "Status": false,
@@ -115,7 +116,7 @@ router.post('/', async function (req, res) {
    }
 
    console.log(result);
-   let update = await info.update(result.id, email, name, phone);
+   let update = await infos.update(result.id, email, name, phone);
    if (update instanceof Error) {
       res.status(200).send({
          "Status": false,
@@ -151,7 +152,7 @@ router.post('/login', async function (req, res) {
       return;
    }
 
-   let result = await customer.login(username, password);
+   let result = await customers.login(username, password);
    if (result instanceof Error) {
       res.status(200).send({
          "Status": false,
@@ -200,7 +201,7 @@ router.post('/receiver/', [userMiddleware], async function (req, res) {
       return;
    }
 
-   let result = await receiver.create(customer_id, rcver, remind_name);
+   let result = await receivers.create(customer_id, rcver, remind_name);
 
    if (result instanceof Error) {
       res.status(200).send({
@@ -232,7 +233,7 @@ router.get('/receiver', [userMiddleware], async function (req, res) {
       return;
    }
 
-   let result = await receiver.get(customer_id);
+   let result = await receivers.get(customer_id);
 
    if (result instanceof Error) {
       res.status(200).send({
@@ -273,7 +274,7 @@ router.delete('/receiver', [userMiddleware], async function (req, res) {
       return;
    }
 
-   let result = await receiver.remove(customer_id, rcver);
+   let result = await receivers.remove(customer_id, rcver);
 
    if (result instanceof Error) {
       res.status(200).send({
@@ -312,12 +313,44 @@ router.post('/refresh', [userMiddleware], function (req, res) {
       return;
    }
 
-   access_token = token.refresh(access_token, refresh_token);
+   access_token = tokens.refresh(access_token, refresh_token);
    res.status(200).send({
       "Status": true,
-      "Token": token
+      "Token": tokens
    })
 });
+
+router.get('/info', [userMiddleware], async function (req, res) {
+   let customer_id = req.query["customer_id"]
+   let username = req.query["username"]
+   if (customer_id == undefined && username == undefined) {
+      res.status(200).send({
+         "Status" : false,
+         "Message": "need customer_id or username param"
+      });
+      return;
+   }
+   let result;
+   if (customer_id != undefined) {
+      result = await customers.getInfoById(customer_id);
+   } else {
+      result = await customer.getInfoByUsername(username);
+   }
+
+   if (result instanceof Error) {
+      res.status(200).send({
+         "Status" : false,
+         "Message" : result.message
+      });
+      return;
+   }
+   
+   res.status(200).send({
+      "Status" : true,
+      "Message" : "Get information successfully",
+      "Info" : result  
+   });
+})
 
 router.post('/info', [userMiddleware], async function (req, res) {
    let customer_id = req.body["customer_id"];
@@ -331,7 +364,7 @@ router.post('/info', [userMiddleware], async function (req, res) {
       return;
    }
 
-   let result = await info.update(customer_id, email, name);
+   let result = await infos.update(customer_id, email, name);
    
    res.status(200).send({
       "Status" : true,

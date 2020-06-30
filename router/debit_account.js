@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const debit = require('../model/customers/debit_account');
+const debits = require('../model/customers/debit_account');
 const customer = require('../model/customers/customer');
 const userMiddleware = require('../middleware/userValidate');
 
@@ -14,7 +14,7 @@ router.post('/create', [userMiddleware], async function(req, res) {
         return;
     }
 
-    let result = await debit.create(customer_id);
+    let result = await debits.create(customer_id);
     if (result instanceof Error) {
         res.status(200).send({
             "Status" : false,
@@ -28,5 +28,39 @@ router.post('/create', [userMiddleware], async function(req, res) {
         "Message" : result
     });
 });
+
+router.get('/', [userMiddleware], async function(req, res) {
+    let debit_id = req.query["debit_id"]
+    let owner = req.query["owner"]
+
+    if (debit_id == undefined && owner == undefined) {
+        res.status(200).send({
+            "Status" : false,
+            "Message" : "need debit_id or owner param"
+        });
+        return;
+    }    
+
+    let result;
+    if (debit_id != undefined) {
+        result = await debits.getById(debit_id);
+    } else {
+        result = await debits.getByOwner(owner);
+    }   
+
+    if (result instanceof Error) {
+        res.status(200).send({
+            "Status" : false,
+            "Message" : result.message
+        });
+        return;
+    }
+
+    res.status(200).send({
+        "Status" : true,
+        "Message" : "Get debit account successfully",
+        "Debit": result
+    });
+})
 
 module.exports = router;

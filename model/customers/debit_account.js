@@ -4,6 +4,10 @@ const tablename = "debit_account";
 const balance = "balance";
 const history = require('../transaction_history');
 
+/**
+ * Return the debit account of a specified user
+ * @param {*} owner 
+ */
 async function getByOwner(owner) {
     let result = await db.query(`SELECT * FROM ${tablename} WHERE owner=${owner}`);
     if (result.length == 0) return new Error("This customer does not have any debit account");
@@ -11,11 +15,20 @@ async function getByOwner(owner) {
     return result[0];
 }
 
+/**
+ * Return the debit account by a specified debit account id
+ * @param {*} id of the debit account
+ */
 async function getById(id) {
     let result = await db.query(`SELECT * FROM ${tablename} WHERE id=${id}`);
     if (result.length == 0) return new Error("Debit account was not found");
 
     return result[0];
+}
+
+async function getByCustomerId(customer_id) {
+    let debit_id = 9704366600000000 + Number(owner);
+    return getById(id);
 }
 
 /**
@@ -137,6 +150,7 @@ async function transfer(fromId, toId, amount, message) {
 module.exports = {
     getByOwner,
     getById,
+    getByCustomerId,
     create,
     draw,
     charge,

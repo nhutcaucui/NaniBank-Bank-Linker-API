@@ -3,10 +3,11 @@ const tablename = "customer";
 const bcrypt = require('bcryptjs');
 const SALT_ROUNDS = 10;
 
-const info = require('./customer_information');
-const message = require('./customer_message');
-const receiver = require('./customer_receiver');
-const token = require('./customer_token');
+const infos = require('./customer_information');
+const messages = require('./customer_message');
+const receivers = require('./customer_receiver');
+const debits = require('./debit_account');
+const tokens = require('./customer_token');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const secret_key = config.get('secret-key');
@@ -24,9 +25,10 @@ async function getByName(username, relation = true) {
     let user = result[0];
 
     if (relation) {
-        user.info = await info.get(user.id);
-        user.message = await message.get(user.id);
-        user.receiver = await receiver.get(user.id);
+        user.info = await infos.get(user.id);
+        user.message = await messages.get(user.id);
+        user.receiver = await receivers.get(user.id);
+        user.debit = await debits.getByCustomerId(user.id);
     }
 
     return user;
@@ -44,13 +46,29 @@ async function getById(id, relation = true) {
     let user = result[0];
 
     if (relation) {
-        user.info = await info.get(user.id);
-        user.message = await message.get(user.id);
-        user.receiver = await receiver.get(user.id);
-    
+        user.info = await infos.get(user.id);
+        user.message = await messages.get(user.id);
+        user.receiver = await receivers.get(user.id);
+        user.debit = await debits.getByCustomerId(user.id);
     }
 
     return user;
+}
+
+async function getInfoById(id) {
+    let info = await info.get(id)
+    let message = await message.get(id)
+    let receiver = await receivers.get(user.id);
+    let debit = await debits.getById(id)
+    return {info, message, receiver, debit}
+}
+
+async function getInfoByUsername(username) {
+    let result = await db.query(`SELECT * FROM ${tablename} WHERE username = '${username}'`);
+    if (result.length == 0) return new Error("UserId was not exist");
+    let user = result[0];
+
+    return getInfoById(user.id);
 }
 
 /**
@@ -69,8 +87,8 @@ async function create(username, password) {
         password: hashedPassword
     }
     user = await db.addtb(tablename, entity);
-    token.create(user.insertId, await bcrypt.hash(user.insertId.toString(), 2));
-    info.create(user.insertId);
+    tokens.create(user.insertId, await bcrypt.hash(user.insertId.toString(), 2));
+    infos.create(user.insertId);
     return {id: user.insertId, username : username};
 }
 
@@ -142,6 +160,8 @@ async function login(username, password, constraint = true) {
 module.exports = {
     getByName,
     getById,
+    getInfoById,
+    getInfoByUsername,
     changePassword,
     resetPassword,
     create,

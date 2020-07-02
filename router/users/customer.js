@@ -291,7 +291,7 @@ router.delete('/receiver', [userMiddleware], async function (req, res) {
    });
 });
 
-router.post('/refresh', [userMiddleware], function (req, res) {
+router.post('/refresh', function (req, res) {
    let access_token = req.body["access_token"];
    let refresh_token = req.body["refresh_token"];
 
@@ -316,7 +316,7 @@ router.post('/refresh', [userMiddleware], function (req, res) {
    access_token = tokens.refresh(access_token, refresh_token);
    res.status(200).send({
       "Status": true,
-      "Token": tokens
+      "Token": access_token
    })
 });
 

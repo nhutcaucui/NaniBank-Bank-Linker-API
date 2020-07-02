@@ -59,10 +59,10 @@ async function getById(id, relation = true) {
 }
 
 async function getInfoById(id) {
-    let info = await info.get(id);
-    let message = await message.get(id);
-    let receiver = await receivers.get(user.id);
-    let debit = await debits.getById(id);
+    let info = await infos.get(id);
+    let message = await messages.get(id);
+    let receiver = await receivers.get(id);
+    let debit = await debits.getByCustomerId(id);
     let saving = await saves.get(id);
     return {info, message, receiver, debit, saving}
 }

@@ -154,8 +154,11 @@ async function login(username, password, constraint = true) {
         if (!match) return new Error("Username or password does not match");
     }
 
+    let refreshTokenResult = await tokens.get(customer.id);
+    let refreshToken = refreshTokenResult[0];
+
     let token = jwt.sign({id: customer.id, exp: moment().add(15, "minutes").unix()}, secret_key);
-    return {token : token, customer : {
+    return {token : token, refresh_token: refreshToken.refresh_token, customer : {
         id: customer.id,
         customer: customer
     }};

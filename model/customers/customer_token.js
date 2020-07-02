@@ -2,7 +2,7 @@ const db = require('../db');
 const tablename = "customer_token";
 
 function get(id) {
-    return db.query(`SELECT * FROM ${tablename} WHERE id = '${id}'`);
+    return db.query(`SELECT * FROM ${tablename} WHERE customer_id = '${id}'`);
 }
 
 /**

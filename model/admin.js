@@ -8,7 +8,9 @@ const config = require('config');
 const secret_key = config.get('secret-key');
 
 async function getById(id) {
+    console.log(`SELECT * FROM ${tablename} WHERE username = '${username}'`);
     let result = await db.query(`SELECT * FROM ${tablename} WHERE username = '${username}'`);
+    console.log(`SELECT * FROM ${tablename} WHERE username = '${username}'`);
     if (result.length == 0) {
         return new Error("Id was not found");
     }
@@ -17,7 +19,9 @@ async function getById(id) {
 }
 
 async function getByName(username) {
+    console.log(`SELECT * FROM ${tablename} WHERE username = '${username}'`);
     let result = await db.query(`SELECT * FROM ${tablename} WHERE username = '${username}'`);
+    console.log(`SELECT * FROM ${tablename} WHERE username = '${username}'`);
     if (result.length == 0) {
         return new Error("Username was not found");
     }

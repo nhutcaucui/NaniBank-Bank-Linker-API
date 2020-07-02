@@ -93,6 +93,7 @@ async function create(username, password) {
     user = await db.addtb(tablename, entity);
     tokens.create(user.insertId, await bcrypt.hash(user.insertId.toString(), 2));
     infos.create(user.insertId);
+    debits.create(user.insertId);
     return {id: user.insertId, username : username};
 }
 

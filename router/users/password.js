@@ -90,7 +90,10 @@ router.post('/change', [userMiddleware], async function(req, res) {
         });
         return;
     } 
-    res.status(200).send(result);
+    res.status(200).send({
+        "Status" : true,
+        "Message" : "Change password successfully"
+    });
 });
 
 module.exports = router;

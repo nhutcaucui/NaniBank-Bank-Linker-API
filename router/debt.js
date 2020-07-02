@@ -146,6 +146,7 @@ router.post('/pay', [userMiddleware], async function(req, res) {
 
 router.delete('/', [userMiddleware], async function(req, res) {
     let id = req.body["id"];
+    let delete_message = req.body["delete_messsage"]
     if (id == undefined) {
         res.status(200).send({
             "Status" : false,

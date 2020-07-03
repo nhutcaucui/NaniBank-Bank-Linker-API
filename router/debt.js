@@ -4,6 +4,7 @@ const debit = require('../model/customers/debit_account');
 const customer = require('../model/customers/customer');
 const debt = require('../model/customers/debt');
 const userMiddleware = require('../middleware/userValidate');
+const otpMiddleware = require('../middleware/otpValidate').otpValidate;
 
 router.get('/', [userMiddleware], async function(req, res) {
     let customer_id = req.query["customer_id"];
@@ -102,7 +103,7 @@ router.post('/', [userMiddleware], async function(req, res) {
     });
 });
 
-router.post('/pay', [userMiddleware], async function(req, res) {
+router.post('/pay', [userMiddleware, otpMiddleware], async function(req, res) {
     let id = req.body["id"];
 
     if (id == undefined) {

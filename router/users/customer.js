@@ -115,7 +115,7 @@ router.post('/', async function (req, res) {
       return;
    }
 
-   console.log(result);
+   //console.log(result);
    let update = await infos.update(result.id, email, name, phone);
    if (update instanceof Error) {
       res.status(200).send({
@@ -314,7 +314,7 @@ router.post('/refresh', async function (req, res) {
    }
 
    let result = await tokens.refresh(access_token, refresh_token);
-   console.log(result+ "in route");
+   //console.log(result+ "in route");
    res.status(200).send({
       "Status": true,
       "Token": result

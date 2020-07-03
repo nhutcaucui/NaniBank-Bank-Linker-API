@@ -32,8 +32,8 @@ async function refresh(access_token, refresh_token) {
     let conditionEntity = {refresh_token: refresh_token};
     let valueEntity = {access_token: token};
     db.updatetb(tablename, conditionEntity, valueEntity);
-    console.log(token);
-    return valueEntity;
+    console.log(token+ "in model");
+    return token;
 }
 
 module.exports = {

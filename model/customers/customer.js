@@ -42,6 +42,7 @@ async function getByName(username, relation = true) {
  * @param {*} relation whether if include the relative table in the result
  */
 async function getById(id, relation = true) {
+    console.log(id);
     let result = await db.query(`SELECT * FROM ${tablename} WHERE id=${id}`);
 
     if (result.length == 0) return new Error("UserId was not exist");
@@ -59,10 +60,10 @@ async function getById(id, relation = true) {
 }
 
 async function getInfoById(id) {
-    let info = await info.get(id);
-    let message = await message.get(id);
-    let receiver = await receivers.get(user.id);
-    let debit = await debits.getById(id);
+    let info = await infos.get(id);
+    let message = await messages.get(id);
+    let receiver = await receivers.get(id);
+    let debit = await debits.getByCustomerId(id);
     let saving = await saves.get(id);
     return {info, message, receiver, debit, saving}
 }
@@ -158,6 +159,11 @@ async function login(username, password, constraint = true) {
     let refreshToken = refreshTokenResult[0];
 
     let token = jwt.sign({id: customer.id, exp: moment().add(15, "minutes").unix()}, secret_key);
+
+    let conditionEntity = {refresh_token: refreshToken.refresh_token};
+    let valueEntity = {access_token: token};
+    db.updatetb(tablename, conditionEntity, valueEntity);
+
     return {token : token, refresh_token: refreshToken.refresh_token, customer : {
         id: customer.id,
         customer: customer

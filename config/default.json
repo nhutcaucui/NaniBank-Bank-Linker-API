@@ -3,7 +3,7 @@
         "dbConfig": {
             "host": "localhost",
             "user": "root",
-            "password": "manager",
+            "password": "",
             "database": "nanibank"
         }
     },

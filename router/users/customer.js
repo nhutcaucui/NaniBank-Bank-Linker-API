@@ -291,7 +291,7 @@ router.delete('/receiver', [userMiddleware], async function (req, res) {
    });
 });
 
-router.post('/refresh', [userMiddleware], function (req, res) {
+router.post('/refresh', async function (req, res) {
    let access_token = req.body["access_token"];
    let refresh_token = req.body["refresh_token"];
 
@@ -313,10 +313,11 @@ router.post('/refresh', [userMiddleware], function (req, res) {
       return;
    }
 
-   access_token = tokens.refresh(access_token, refresh_token);
+   let result = await tokens.refresh(access_token, refresh_token);
+   console.log(result+ "in route");
    res.status(200).send({
       "Status": true,
-      "Token": tokens
+      "Token": result
    })
 });
 

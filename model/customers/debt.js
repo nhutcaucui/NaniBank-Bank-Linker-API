@@ -49,7 +49,7 @@ async function create(creditor, debtor,name, amount, issue_date) {
         debtor: debtor,
         name : name,
         amount: amount,
-        issue_date: issue_date
+        due_time: issue_date
     };
 
     return await db.addtb(tablename, entity);

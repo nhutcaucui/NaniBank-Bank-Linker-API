@@ -1,11 +1,15 @@
 {
     "Database": {
         "dbConfig": {
-            "host": "mysql-nanibank-api",
-            "port": 3306,
+            "host": "mysql-nanibank-api:3306",
             "user": "root",
             "password": "nanibank",
             "database": "nanibank"
         }
-    }
+    },
+    "secret-key": "himom",
+    "60-days-key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZXhwIjoxNTk2NjIyMDMzLCJpYXQiOjE1OTE0MzgwMzN9.yzEJk2Jp9yLrOvVD-TFUnhj5Yf-w2k1VKm58jGg7zQY",
+    "mail-host" : "localhost:6920",
+    "upper-limit": 30,
+    "lower-limit": -30
 }

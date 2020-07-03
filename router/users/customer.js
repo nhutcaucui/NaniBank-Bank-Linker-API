@@ -313,10 +313,11 @@ router.post('/refresh', function (req, res) {
       return;
    }
 
-   access_token = tokens.refresh(access_token, refresh_token);
+   let result = tokens.refresh(access_token, refresh_token);
+   console.log(result.access_token);
    res.status(200).send({
       "Status": true,
-      "Token": access_token
+      "Token": result.access_token
    })
 });
 

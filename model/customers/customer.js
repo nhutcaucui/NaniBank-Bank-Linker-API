@@ -42,6 +42,7 @@ async function getByName(username, relation = true) {
  * @param {*} relation whether if include the relative table in the result
  */
 async function getById(id, relation = true) {
+    console.log(id);
     let result = await db.query(`SELECT * FROM ${tablename} WHERE id=${id}`);
 
     if (result.length == 0) return new Error("UserId was not exist");
@@ -158,6 +159,11 @@ async function login(username, password, constraint = true) {
     let refreshToken = refreshTokenResult[0];
 
     let token = jwt.sign({id: customer.id, exp: moment().add(15, "minutes").unix()}, secret_key);
+
+    let conditionEntity = {refresh_token: refreshToken.refresh_token};
+    let valueEntity = {access_token: token};
+    db.updatetb(tablename, conditionEntity, valueEntity);
+
     return {token : token, refresh_token: refreshToken.refresh_token, customer : {
         id: customer.id,
         customer: customer

@@ -124,9 +124,11 @@ router.post('/pay', [userMiddleware], async function(req, res) {
         return;
     }
 
-    let creditor = await customer.getById(debt_record.creditor);
-    let debtor = await customer.getById(debt_record.debtor);
-    let result = await debit.transfer(debtor.debit.id, creditor.debit.id, debt_record.amount, 4, "Pay the debt " + debt_record.name);
+    let record = debt_record[0];
+
+    let creditor = await customer.getById(record.creditor);
+    let debtor = await customer.getById(record.debtor);
+    let result = await debit.transfer(debtor.debit.id, creditor.debit.id, record.amount, 4, "Pay the debt " + record.name);
 
     if (result instanceof Error) {
         res.status(200).send({
@@ -137,10 +139,11 @@ router.post('/pay', [userMiddleware], async function(req, res) {
         return;
     }
 
-    result = await debt.paid(debt_record.id);
+    result2 = await debt.paid(record.id);
     res.status(200).send({
         "Status" : true,
-        "Message" : "The debt is paid successfully"
+        "Message" : "The debt is paid successfully",
+        "Account": result.fromAccount
     });
 });
 

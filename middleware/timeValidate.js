@@ -13,7 +13,8 @@ function timeValidate(req, res, next) {
         return;
     }
     
-    let send = moment(date, "X").unix();
+    let send = isNaN(date) ? moment(date, "X").unix() : date;
+    
     let current = moment().unix();
     let diff = current - send;
     

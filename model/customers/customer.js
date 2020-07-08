@@ -42,7 +42,7 @@ async function getByName(username, relation = true) {
  * @param {*} relation whether if include the relative table in the result
  */
 async function getById(id, relation = true) {
-    console.log(id);
+    //console.log(id);
     let result = await db.query(`SELECT * FROM ${tablename} WHERE id=${id}`);
 
     if (result.length == 0) return new Error("UserId was not exist");

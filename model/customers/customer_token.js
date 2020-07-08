@@ -2,7 +2,9 @@ const db = require('../db');
 const tablename = "customer_token";
 const jwt = require('jsonwebtoken');
 const moment = require('moment');
-const secret_key = "hi mom";
+const  config  = require('npm');
+const defConfig = require('config');
+const secret_key = defConfig.get('secret-key')
 
 function get(id) {
     return db.query(`SELECT * FROM ${tablename} WHERE customer_id = '${id}'`);
@@ -32,7 +34,7 @@ async function refresh(access_token, refresh_token) {
     let conditionEntity = {refresh_token: refresh_token};
     let valueEntity = {access_token: token};
     db.updatetb(tablename, conditionEntity, valueEntity);
-    console.log(token+ "in model");
+    //console.log(token+ "in model");
     return token;
 }
 

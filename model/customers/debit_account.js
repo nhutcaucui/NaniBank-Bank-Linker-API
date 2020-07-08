@@ -119,9 +119,9 @@ async function draw(id, amount, message = "Draw " + amount + " from debit accoun
  */
 async function transfer(fromId, toId, amount, message) {
     if (amount <= 0) return Error("Amount cannot be negative");
-    let result = await getById(id);
+    // let result = await getById(id);
 
-    if (result instanceof Error) return result;
+    // if (result instanceof Error) return result;
 
     let fromAccount = await getById(fromId);
     if (fromAccount instanceof Error) {

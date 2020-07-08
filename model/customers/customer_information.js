@@ -24,7 +24,7 @@ async function create(customer_id, email = "", name = "", phone = "") {
     };
     let result = await db.addtb(tablename, entity);
     if (result instanceof Error) {
-        console.log(result);
+        //console.log(result);
     }
 
     return result;

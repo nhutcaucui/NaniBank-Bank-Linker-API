@@ -41,6 +41,7 @@ router.post('/login', async function(req, res) {
             "Type": 1,
             "Token": result.token,
             "Customer": result.customer,
+            "RefreshToken": result.refresh_token,
         });
         return;
     }

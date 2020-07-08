@@ -79,7 +79,7 @@ router.post('/transfer', [userMiddleware, otpMiddleware], async function(req, re
 		});
 		return;
 	}
-
+	
 	if (to == undefined) {
 		res.status(200).send({
 			"Status" : false,
@@ -100,7 +100,7 @@ router.post('/transfer', [userMiddleware, otpMiddleware], async function(req, re
 		message = "Transfer money";
 	}
 
-	let result = debit.transfer(from, to, amount, message);
+	let result = await debit.transfer(from, to, amount, message);
 	if (result instanceof Error) {
 		res.status(200).send({
 			"Status" : false,
@@ -113,6 +113,7 @@ router.post('/transfer', [userMiddleware, otpMiddleware], async function(req, re
 	res.status(200).send({
 		"Status" : true,
 		"Message" : "Transfer successfully",
+		"Account": result.fromAccount
 	});
 });
 
@@ -120,7 +121,7 @@ router.get('/history/all', [userMiddleware], async function(req, res) {
 	let result = await histories.all();
 	if (result instanceof Error) {
 		res.status(200).send({
-			"Stauts" : false,
+			"Status" : false,
 			"Message" : result.message
 		});
 		return;

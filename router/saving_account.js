@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
-const debit = require('../model/customers/debit_account');
-const customer = require('../model/customers/customer');
+const debits = require('../model/customers/debit_account');
+const customers = require('../model/customers/customer');
 const saves = require('../model/customers/saving_account');
 const userMiddleware = require('../middleware/userValidate');
 

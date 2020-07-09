@@ -26,8 +26,8 @@ async function verify(req, res, next) {
     let p = result;
     let publicKey = p["publicKey"];
 
-	success = await pgp.verify(signature, publicKey);
-
+	// success = await pgp.verify(signature, publicKey);
+    success = await pgp.detachedVerify(signature, publicKey);
     if (!success) {
 		res.status(200).send({
 			"status": false,

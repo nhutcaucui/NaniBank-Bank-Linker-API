@@ -13,7 +13,7 @@ describe('PGP', function () {
             console.log(signature);
             let status = await pgp.verify(signature, publicKey);
 
-            assert.equal(status, true, "PGP Naniiiiiiiiiiiiiiii");
+            assert.strictEqual(status, true, "PGP Naniiiiiiiiiiiiiiii");
         });
     });
 });

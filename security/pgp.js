@@ -25,9 +25,9 @@ async function verify(content, publicKey) {
             message: await openpgp.cleartext.readArmored(content),
             publicKeys: [key]
         });
-    
+
         let { valid } = verified.signatures[0];
-        
+
         if (valid) {
             console.log('signed by key id ' + verified.signatures[0].keyid.toHex());
         } else {
@@ -40,7 +40,32 @@ async function verify(content, publicKey) {
     }
 };
 
+function detachedVerify(detachedSignature, pukey) {
+    try {
+        const verified = await openpgp.verify({
+            message: await openpgp.message.fromText("himom"),
+            signature: await openpgp.signature.readArmored(
+                new Buffer(detachedSignature, "base64").toString("ascii")
+            ),
+            publicKeys: (await openpgp.key.readArmored(pukey)).keys, // for verification
+        });
+        const { valid } = verified.signatures[0];
+
+        if (valid) {
+            console.log(
+                "Signed by key id " + verified.signatures[0].keyid.toHex()
+            );
+            return Promise.resolve({ message: "Signature verified" });
+        } else {
+            return Promise.reject("Signature could not be verified");
+        }
+    } catch (e) {
+        return Promise.reject("Signature could not be verified");
+    }
+};
+
 module.exports = {
     sign,
-    verify
+    verify,
+    detachedVerify
 }

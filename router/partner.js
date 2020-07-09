@@ -76,7 +76,7 @@ router.post('/add', async function (req, res) {
 
 });
 
-router.post('/transfer', [hashMiddleware, partnerMiddleware], async function (req, res) {
+router.post('/transfer', [hashMiddleware, partnerMiddleware, verify], async function (req, res) {
     let id = req.body["id"];
     if (id == undefined) {
         res.status(200).send({

@@ -8,7 +8,7 @@ async function verify(req, res, next) {
     if(signature == undefined){
         res.status(200).send({
 			"status": false,
-			"message": "Signature is missing"
+			"message": "sig header is missing"
         })
         
         return;

@@ -7,12 +7,12 @@ async function hashAuthenValidate(req, res, next) {
 			"status": false,
 			"message": "No hash"
         })
-        
+
         return;
     }
     //var decodedBase64 = await Buffer.from(hash, 'base64').toString('ascii');
 
-    var stringCheck = req.headers["timestamp"] + "hi mom" + JSON.stringify(req.body);
+    var stringCheck = req.headers["timestamp"] + "himom" + JSON.stringify(req.body);
     var hashCheck = await Crypto.createHash('sha256').update(stringCheck).digest("base64");
 
     if(hashCheck != hash){

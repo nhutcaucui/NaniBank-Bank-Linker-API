@@ -15,8 +15,12 @@ async function hashAuthenValidate(req, res, next) {
 
     var stringCheck = req.headers["timestamp"] + "himom" + JSON.stringify(req.body);
     var hashCheck = await Crypto.createHash('sha256').update(stringCheck).digest('hex');
+    var nguyen = sha256(req.headers["timestamp"] + "himom" + JSON.stringify(req.body));
 
+    console.log("[Check]", stringCheck);
     console.log(hashCheck);
+    console.log(nguyen);
+    console.log(hashCheck == nguyen);
     if(hashCheck != hash){
         res.status(200).send({
 			"status": false,

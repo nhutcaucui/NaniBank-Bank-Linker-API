@@ -6,7 +6,12 @@ async function id(id) {
 }
 
 async function name(name) {
-    return await db.query(`SELECT * FROM ${tablename} WHERE name = '${name}'`)
+    let result = await db.query(`SELECT * FROM ${tablename} WHERE name = '${name}'`)
+    if (result.length == 0) {
+        return new Error("partner name was not found");
+    }
+
+    return result[0];
 }
 
 async function add(name, publicKey, hashMethod) {

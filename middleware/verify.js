@@ -3,7 +3,7 @@ const pgp = require('../security/pgp');
 const fs = require('fs')
 
 async function verify(req, res, next) {
-    let name = req.body["name"];
+    let name = req.headers["name"];
     let signature = req.headers["sig"];
     if(signature == undefined){
         res.status(200).send({
@@ -14,9 +14,17 @@ async function verify(req, res, next) {
         return;
     }
     
-    p = await partner.name(name);
+    let result= await partner.name(name);
+    if (result instanceof Error) {
+        res.status(200).send({
+            "status" : false,
+            "message" : result.message
+        });
+        return;
+    }
 
-    let publicKey = p[0]["publicKey"];
+    let partner = result;
+    let publicKey = partner["publicKey"];
 
 	success = await pgp.verify(signature, publicKey);
 

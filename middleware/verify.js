@@ -1,4 +1,4 @@
-const partner = require('../model/partner');
+const partners = require('../model/partner');
 const pgp = require('../security/pgp');
 const fs = require('fs')
 
@@ -14,7 +14,7 @@ async function verify(req, res, next) {
         return;
     }
     
-    let result= await partner.name(name);
+    let result= await partners.name(name);
     if (result instanceof Error) {
         res.status(200).send({
             "status" : false,
@@ -23,8 +23,8 @@ async function verify(req, res, next) {
         return;
     }
 
-    let partner = result;
-    let publicKey = partner["publicKey"];
+    let p = result;
+    let publicKey = p["publicKey"];
 
 	success = await pgp.verify(signature, publicKey);
 

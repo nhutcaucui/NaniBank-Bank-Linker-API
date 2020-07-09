@@ -3,12 +3,12 @@ const pgp = require('../security/pgp');
 const rsa = require('../security/rsa');
 
 async function partnerValidate(req, res, next) {
-	let name = req.body["name"];
+	let name = req.headers["name"];
     let success = false;
     if (!name) {
         res.status(200).send({
             "status": false,
-            "message": "name param is missing"
+            "message": "name header is missing"
         });
 
         return;

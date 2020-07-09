@@ -12,10 +12,10 @@ async function hashAuthenValidate(req, res, next) {
         return;
     }
     //var decodedBase64 = await Buffer.from(hash, 'base64').toString('ascii');
-
-    var stringCheck = req.headers["timestamp"] + "himom" + JSON.stringify(req.body);
+    let timestamp = req.headers["timestamp"];
+    var stringCheck = timestamp + "himom" + JSON.stringify(req.body);
     var hashCheck = await Crypto.createHash('sha256').update(stringCheck).digest('hex');
-    var nguyen = sha256(req.headers["timestamp"] + "himom" + JSON.stringify(req.body));
+    var nguyen = sha256(stringCheck);
 
     console.log("[Check]", stringCheck);
     console.log(hashCheck);

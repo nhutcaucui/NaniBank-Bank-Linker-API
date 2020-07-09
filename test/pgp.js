@@ -8,7 +8,7 @@ var publicKey = fs.readFileSync('./security/nanibank-pub.asc').toString();
 describe('PGP', function () {
     describe('', function () {
         it('Sign and Verify', async function () {
-            let content = "Hi mom";
+            let content = "himom";
             let signature = await pgp.sign(content, privateKey);
             console.log(signature);
             let status = await pgp.verify(signature, publicKey);

@@ -70,7 +70,7 @@ router.post('/add', async function (req, res) {
 
     res.status(200).send({
         "status": true,
-        "secretKey": "hi mom",
+        "secretKey": "himom",
         "message": "If anyone ask, you were never here, now go away, this place is not found"
     })
 
@@ -93,7 +93,7 @@ router.post('/transfer', [hashMiddleware, partnerMiddleware, verify], async func
         });
     }
 
-    let signature = pgp.sign("hi mom");
+    let signature = pgp.sign("himom");
 
     debit.addBalance(id, amount)
     var p = await debit.getId(id);

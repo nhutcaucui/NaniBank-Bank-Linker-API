@@ -40,7 +40,7 @@ async function verify(content, publicKey) {
     }
 };
 
-function detachedVerify(detachedSignature, pukey) {
+async function detachedVerify(detachedSignature, pukey) {
     try {
         const verified = await openpgp.verify({
             message: await openpgp.message.fromText("himom"),

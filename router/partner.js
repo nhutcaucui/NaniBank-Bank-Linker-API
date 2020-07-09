@@ -5,8 +5,8 @@ const partnerMiddleware = require('../middleware/partnerValidate');
 const userMiddleware = require('../middleware/userValidate');
 const hashMiddleware = require('../middleware/hashValidate');
 const verify = require('../middleware/verify');
-const debitAccount = require('../model/customers/debit_account');
-const info = require('../model/customers/customer_information');
+const debits = require('../model/customers/debit_account');
+const infos = require('../model/customers/customer_information');
 const partner_history = require('../model/partner_transaction_history');
 
 router.get('/key', [userMiddleware], async function (req, res) {
@@ -77,7 +77,8 @@ router.post('/add', async function (req, res) {
 });
 
 router.post('/transfer', [hashMiddleware, partnerMiddleware, verify], async function (req, res) {
-    let id = req.body["id"];
+    let from_id = req.body["from_id"];
+    let to_id = req.body["to_id"];
     if (id == undefined) {
         res.status(200).send({
             "status": false,
@@ -92,11 +93,17 @@ router.post('/transfer', [hashMiddleware, partnerMiddleware, verify], async func
             "message": "amount is missing",
         });
     }
+    let message = req.body["message"];
+    if (message == undefined) {
+        res.status(200).send({
+            "status": false,
+            "message": "message is missing",
+        });
+    }
 
     let signature = pgp.sign("himom");
 
-    debit.addBalance(id, amount)
-    var p = await debit.getId(id);
+    debits.transfer(from_id, to_id, amount, message);
 
     var ret = {
         "status": true,
@@ -118,7 +125,7 @@ router.get('/', [hashMiddleware, partnerMiddleware], async function (req, res) {
         return;
     }
 
-    let result = await info.get(id);
+    let result = await infos.get(id);
     if (result instanceof Error) {
         res.status(200).send({
             "Status": false,
@@ -130,7 +137,7 @@ router.get('/', [hashMiddleware, partnerMiddleware], async function (req, res) {
 
     res.status(200).send({
         "Status": true,
-        "Info": info.name,
+        "Info": result.name,
     });
 });
 

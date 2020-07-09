@@ -76,7 +76,7 @@ router.post('/add', async function (req, res) {
 
 });
 
-router.post('/transfer', [hashMiddleware, partnerMiddleware, verify], async function (req, res) {
+router.post('/transfer', [hashMiddleware, partnerMiddleware], async function (req, res) {
     let id = req.body["id"];
     if (id == undefined) {
         res.status(200).send({
@@ -107,7 +107,7 @@ router.post('/transfer', [hashMiddleware, partnerMiddleware, verify], async func
     res.status(200).send(ret);
 });
 
-router.get('/', [hashMiddleware, partnerMiddleware, verify], async function (req, res) {
+router.get('/', [hashMiddleware, partnerMiddleware], async function (req, res) {
     let id = req.query["id"];
     if (id == undefined) {
         res.status(200).send({

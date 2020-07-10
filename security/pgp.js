@@ -3,6 +3,7 @@ const fs = require('fs');
 const prkey = fs.readFileSync('./security/nanibank-sec.asc').toString();
 const pukey = fs.readFileSync('./security/nanibank-pub.asc').toString();
 const passphrase = `himom`;
+const publickeys = require('./publickey');
 
 //Sign the content by nanibank private key
 async function sign(content) {
@@ -42,12 +43,13 @@ async function verify(content, publicKey) {
 
 async function detachedVerify(detachedSignature, pukey) {
     try {
+        const sign = detachedSignature
         const verified = await openpgp.verify({
             message: await openpgp.message.fromText("himom"),
             signature: await openpgp.signature.readArmored(
-                new Buffer(detachedSignature, "base64").toString("ascii")
+                new Buffer(sign, "base64").toString("ascii")
             ),
-            publicKeys: (await openpgp.key.readArmored(pukey)).keys, // for verification
+            publicKeys: (await openpgp.key.readArmored(publickeys.pgpnguyen)).keys, // for verification
         });
         const { valid } = verified.signatures[0];
 

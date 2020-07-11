@@ -1,4 +1,4 @@
-const pgpnguyen = `-----BEGIN PGP PUBLIC KEY BLOCK-----
+const nguyenbank = `-----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: Keybase OpenPGP v1.0.0
 Comment: https://keybase.io/crypto
 
@@ -52,8 +52,11 @@ A6pN1nNqST9DUku1NJlNmlvU3INNZ30+KiOLqER1zMibyKm4O2LzVKsq0U5BKSKx
 aF3Wf+6bME92QZ6aDOq+AEBqeV0FUkrjNUbLI6QFG6xzeC+akTv7MlZTwasYfagi
 u5RMN8INapOvye5lCw==
 =JFcr
------END PGP PUBLIC KEY BLOCK-----`
+-----END PGP PUBLIC KEY BLOCK-----`;
+
+const lambank = ``;
 
 module.exports = {
-    pgpnguyen
+    pgpnguyen: nguyenbank,
+    rsalam: lambank
 }

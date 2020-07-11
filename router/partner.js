@@ -77,23 +77,31 @@ router.post('/add', async function (req, res) {
 });
 
 router.post('/transfer', [hashMiddleware, partnerMiddleware, verify], async function (req, res) {
+    let name = req.headers["name"];
     let from_id = req.body["from_id"];
     let to_id = req.body["to_id"];
-    if (id == undefined) {
+    let amount = req.body["amount"];
+    let message = req.body["message"];
+    if (from_id == undefined) {
         res.status(200).send({
             "status": false,
-            "message": "id is missing",
+            "message": "from_id is missing",
         });
     }
 
-    let amount = req.body["amount"];
+    if (to_id == undefined) {
+        res.status(200).send({
+            "status": false,
+            "message": "to_id is missing",
+        });
+    }
+
     if (amount == undefined) {
         res.status(200).send({
             "status": false,
             "message": "amount is missing",
         });
     }
-    let message = req.body["message"];
     if (message == undefined) {
         res.status(200).send({
             "status": false,
@@ -101,14 +109,19 @@ router.post('/transfer', [hashMiddleware, partnerMiddleware, verify], async func
         });
     }
 
-    let signature = pgp.sign("himom");
+    // let signature = pgp.sign("himom");
 
-    debits.transfer(from_id, to_id, amount, message);
-
+    let result = await debits.externalTransfer(name, from_id, to_id, amount, message);
+    if (result instanceof Error) {
+        res.status(200).send({
+            "status": false,
+            "message" : result.message
+        });
+        return;
+    }
     var ret = {
         "status": true,
         "message": "Transfer money successfully",
-        "signature": signature
     }
 
     res.status(200).send(ret);

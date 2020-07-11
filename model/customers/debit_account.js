@@ -3,7 +3,7 @@ const moment = require('moment');
 const tablename = "debit_account";
 const balance = "balance";
 const history = require('../transaction_history');
-
+const partner_history = require('../partner_transaction_history');
 /**
  * Return the debit account of a specified user
  * @param {*} owner 
@@ -110,6 +110,17 @@ async function draw(id, amount, message = "Draw " + amount + " from debit accoun
     return await db.updatetb(tablename, conditionEntity, valueEntity);
 }
 
+async function externalTransfer(partner, fromId, toId, amount, message) {
+    if (amount <= 0) return Error("Amount cannot be negative");
+    let toAccount = await getById(toId); 
+    if (toAccount instanceof Error) {
+        return toAccount;
+    }
+    toAccount.balance = Number(toAccount.balance) + Number(amount);
+    db.updatetb(tablename, {id : toAccount.id}, {balance: toAccount.balance});
+    await partner_history.create(partner, fromId, toId, amount, message);
+}
+
 /**
  * Transfer money from an account to another
  * @param {*} fromId 
@@ -138,7 +149,7 @@ async function transfer(fromId, toId, amount, message) {
     }
 
     fromAccount.balance = Number(fromAccount.balance) - Number(amount);
-    toAccount.balance = Number(fromAccount.balance) + Number(amount);
+    toAccount.balance = Number(toAccount.balance) + Number(amount);
 
     db.updatetb(tablename, {id : fromAccount.id}, {balance: fromAccount.balance});
     db.updatetb(tablename, {id : toAccount.id}, {balance: toAccount.balance});
@@ -154,5 +165,6 @@ module.exports = {
     create,
     draw,
     charge,
-    transfer
+    transfer,
+    externalTransfer
 }

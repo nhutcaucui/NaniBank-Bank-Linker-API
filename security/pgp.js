@@ -19,6 +19,19 @@ async function sign(content) {
     return cleartext;
 }
 
+async function detachedSign(secret) {
+    const { keys: [privateKey] } = await openpgp.key.readArmored(prkey);
+    await privateKey.decrypt(passphrase);
+  
+    const { signature: detachedSignature } = await openpgp.sign({
+      message: openpgp.cleartext.fromText(secret), // CleartextMessage or Message object
+      privateKeys: [privateKey],                            // for signing
+      detached: true
+    });
+  
+    return detachedSignature;
+  }
+
 async function verify(content, publicKey) {
     try {
         let { keys: [key] } = await openpgp.key.readArmored(publicKey);
@@ -52,7 +65,6 @@ async function detachedVerify(detachedSignature, bank) {
             publicKeys: (await openpgp.key.readArmored(publickeys[bank])).keys, // for verification
         });
         const { valid } = verified.signatures[0];
-
         if (valid) {
             console.log(
                 "Signed by key id " + verified.signatures[0].keyid.toHex()
@@ -68,6 +80,7 @@ async function detachedVerify(detachedSignature, bank) {
 
 module.exports = {
     sign,
+    detachedSign,
     verify,
     detachedVerify
 }

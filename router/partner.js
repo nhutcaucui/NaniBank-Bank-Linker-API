@@ -8,6 +8,7 @@ const verify = require('../middleware/verify');
 const debits = require('../model/customers/debit_account');
 const infos = require('../model/customers/customer_information');
 const partner_history = require('../model/partner_transaction_history');
+const userValidate = require('../middleware/userValidate');
 
 router.get('/key', [userMiddleware], async function (req, res) {
     let partner_name = req.query["partner_name"]
@@ -147,10 +148,28 @@ router.get('/', [hashMiddleware, partnerMiddleware], async function (req, res) {
 
         return;
     }
+  
 
     res.status(200).send({
         "Status": true,
         "Info": result.name,
+    });
+});
+
+router.get('/all', [userValidate], async function (req, res) {
+    let result = await partners.all();
+    if (result instanceof Error) {
+        res.status(200).send({
+            "Status": false,
+            "Message": result.message
+        });
+
+        return;
+    }
+
+    res.status(200).send({
+        "Status": true,
+        "Partners": result,
     });
 });
 
@@ -193,7 +212,25 @@ router.get('/history', [], async function (req, res) {
     }
 
     res.status(200).send({
-        "Status": false,
+        "Status": true,
+        "Message": "Get history successfully",
+        "Histories": result
+    });
+})
+
+router.get('/history/all', [], async function (req, res) {
+    let result = await partner_history.getAll();
+
+    if (result instanceof Error) {
+        res.status(200).send({
+            "Status": false,
+            "Message": result.message
+        });
+        return;
+    }
+
+    res.status(200).send({
+        "Status": true,
         "Message": "Get history successfully",
         "Histories": result
     });

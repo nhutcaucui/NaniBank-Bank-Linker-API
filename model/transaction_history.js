@@ -33,7 +33,8 @@ async function create(from, to, amount, type, message) {
         to_account: to,
         amount: amount,
         message: message,
-        type : type
+        type : type,
+        time:moment().unix()
     };
 
     return await db.addtb(tablename, entity);

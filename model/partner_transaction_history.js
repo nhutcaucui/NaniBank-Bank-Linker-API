@@ -15,6 +15,10 @@ async function id(history_id) {
     return await db.query(`SELECT * FROM ${tablename} WHERE id=${history_id}`);
 }
 
+async function getAll(){
+    return await db.query(`SELECT * FROM ${tablename}`);
+}
+
 /**
  * Create a parter history record
  * @param {*} partner_id 
@@ -58,6 +62,7 @@ async function statistic(partner_id) {
 
 module.exports = {
     get,
+    getAll,
     create,
     statistic
 }

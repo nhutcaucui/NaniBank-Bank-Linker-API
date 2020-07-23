@@ -106,7 +106,7 @@ async function draw(id, amount, message = "Draw " + amount + " from debit accoun
         balance: account.balance,
     }
 
-    history.create(id, id, -amount, 1, message);
+    //history.create(id, id, -amount, 1, message);
     return await db.updatetb(tablename, conditionEntity, valueEntity);
 }
 

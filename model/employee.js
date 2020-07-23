@@ -7,6 +7,15 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 const secret_key = config.get('secret-key');
 
+async function get() {
+    let result = await db.query(`SELECT * FROM ${tablename}`);
+    if (result.length == 0) {
+        return new Error("No employee");
+    }
+
+    return result;
+}
+
 async function getById(id) {
     let result = await db.query(`SELECT * FROM ${tablename} WHERE username = '${username}'`);
     if (result.length == 0) {
@@ -71,6 +80,7 @@ async function login(username, password) {
 }
 
 module.exports = {
+    get,
     getById,
     getByName,
     create,

@@ -105,4 +105,21 @@ router.use('/ping', function (req, res) {
    res.status(200).send("ping"); 
 });
 
+router.get('/', [userMiddleware], async function(req,res){
+   let result = await employees.get();
+   if (result instanceof Error) {
+      res.status(200).send({
+         "Status" : false,
+         "Message" : result.message
+      });
+
+      return;
+   }
+
+   res.status(200).send({
+      "Status":true,
+      "Employee": result
+   })
+})
+
 module.exports = router;

@@ -5,6 +5,10 @@ async function id(id) {
     return await db.query(`SELECT * FROM ${tablename} WHERE id = '${id}'`);
 }
 
+async function all() {
+    return await db.query(`SELECT * FROM ${tablename}`);
+}
+
 async function name(name) {
     let result = await db.query(`SELECT * FROM ${tablename} WHERE name = '${name}'`)
     if (result.length == 0) {
@@ -25,6 +29,7 @@ async function add(name, publicKey, hashMethod) {
 
 module.exports = {
     id,
+    all,
     name,
     add
 }

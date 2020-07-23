@@ -33,6 +33,69 @@ router.get('/', [userMiddleware], async function(req, res) {
     });
 });
 
+router.get('/username', [userMiddleware], async function(req, res) {
+    let customer_id = req.query["customer_id"];
+
+    if (customer_id == undefined) {
+        res.status(200).send({
+            "Status" : false,
+            "Message" : "customer_id param is missing"
+        });
+        return;
+    }
+
+    let usernameQuery = await customer.getByName(customer_id);
+
+    console.log(usernameQuery)
+
+    let result = await debt.getRelative(usernameQuery.id);
+    if (result instanceof Error || result.length == 0) {
+        res.status(200).send({
+            "Status" : false,
+            "Message" : result.message
+        });
+        return;
+    }
+    console.log(result);
+
+    res.status(200).send({
+        "Status" : true,
+        "Message" : "",
+        "Debt" : result
+    });
+});
+
+router.get('/debit', [userMiddleware], async function(req, res) {
+    let customer_id = req.query["customer_id"];
+
+    if (customer_id == undefined) {
+        res.status(200).send({
+            "Status" : false,
+            "Message" : "customer_id param is missing"
+        });
+        return;
+    }
+
+    let debitAccount = await debit.getById(customer_id);
+
+    console.log(debitAccount)
+
+    let result = await debt.getRelative(debitAccount.owner);
+    if (result instanceof Error) {
+        res.status(200).send({
+            "Status" : false,
+            "Message" : result.message
+        });
+        return;
+    }
+
+    res.status(200).send({
+        "Status" : true,
+        "Message" : "",
+        "Debt" : result
+    });
+});
+
 router.post('/', [userMiddleware], async function(req, res) {
     let creditor = req.body["creditor"];
     let debtor = req.body["debtor"];

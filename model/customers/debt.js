@@ -15,7 +15,7 @@ async function get(id) {
  * @param {*} customer_id customer id
  */
 async function getRelative(customer_id) {
-    return await db.query(`SELECT * FROM ${tablename} WHERE creditor=${customer_id} OR debtor=${customer_id}`);
+    return await db.query(`SELECT * FROM ${tablename} WHERE creditor='${customer_id}' OR debtor='${customer_id}'`);
 }
 
 /**

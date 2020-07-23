@@ -9,6 +9,7 @@ const debits = require('../model/customers/debit_account');
 const infos = require('../model/customers/customer_information');
 const partner_history = require('../model/partner_transaction_history');
 const userValidate = require('../middleware/userValidate');
+const customer = require('../model/customers/customer')
 
 router.get('/key', [userMiddleware], async function (req, res) {
     let partner_name = req.query["partner_name"]
@@ -262,6 +263,159 @@ router.get('/statistic', [userMiddleware], async function (req, res) {
         "Message": "Statistic successfully",
         "Result": result
     });
+});
+
+router.get('/history/username', [userMiddleware], async function (req, res) {
+	let id = req.query["id"];
+	let filter = req.query["filter"] == undefined ? "both" : req.query["filter"];
+	var receiverHistories;
+	var senderHistories;
+	
+	if (id == undefined) {
+		res.status(200).send({
+			"Status": false,
+			"Message": "id param is missing"
+		});
+		return;
+	}
+
+	let usernameQuery = await customer.getByName(id);
+	if (usernameQuery instanceof Error || usernameQuery.length == 0) {
+        res.status(200).send({
+            "Status" : false,
+            "Message" : "User not found"
+        });
+        return;
+	}
+	
+	console.log(usernameQuery.debit.id)
+
+	switch (filter) {
+		case "receiver":
+            receiverHistories = await partner_history.receiverHistory(usernameQuery.debit.id);
+            res.status(200).send({
+				"Status": true,
+				"Message": "Query successfully",
+				"Histories": [
+					...receiverHistories
+				]
+			});
+			break;
+		case "sender":
+            senderHistories = await partner_history.senderHistory(usernameQuery.debit.id);
+            res.status(200).send({
+				"Status": true,
+				"Message": "Query successfully",
+				"Histories": [
+					...senderHistories,
+				]
+			});
+			break;
+		case "both":
+			receiverHistories = await partner_history.receiverHistory(usernameQuery.debit.id);
+            senderHistories = await partner_history.senderHistory(usernameQuery.debit.id);
+            res.status(200).send({
+				"Status": true,
+				"Message": "Query successfully",
+				"Histories": [
+					...senderHistories,
+					...receiverHistories
+				]
+			});
+			break;
+		default:
+			receiverHistories = await partner_history.receiverHistory(usernameQuery.debit.id);
+            senderHistories = await partner_history.senderHistory(usernameQuery.debit.id);
+            res.status(200).send({
+				"Status": true,
+				"Message": "Query successfully",
+				"Histories": [
+					...senderHistories,
+					...receiverHistories
+				]
+			});
+			break;
+	}
+
+	// res.status(200).send({
+	// 	"Status": true,
+	// 	"Message": "Query successfully",
+	// 	"Histories": [
+	// 		...receiverHistories,
+	// 		...senderHistories
+	// 	]
+	// });
+});
+
+router.get('/history/debit', [userMiddleware], async function (req, res) {
+	let id = req.query["id"];
+	let filter = req.query["filter"] == undefined ? "both" : req.query["filter"];
+	var receiverHistories;
+	var senderHistories;
+	
+	if (id == undefined) {
+		res.status(200).send({
+			"Status": false,
+			"Message": "id param is missing"
+		});
+		return;
+	}
+
+	switch (filter) {
+		case "receiver":
+            receiverHistories = await partner_history.receiverHistory(id);
+            res.status(200).send({
+				"Status": true,
+				"Message": "Query successfully",
+				"Histories": [
+					...receiverHistories
+				]
+			});
+			break;
+		case "sender":
+            senderHistories = await partner_history.senderHistory(id);
+            res.status(200).send({
+				"Status": true,
+				"Message": "Query successfully",
+				"Histories": [
+					...senderHistories,
+				]
+			});
+			break;
+		case "both":
+			receiverHistories = await partner_history.receiverHistory(id);
+            senderHistories = await partner_history.senderHistory(id);
+            res.status(200).send({
+				"Status": true,
+				"Message": "Query successfully",
+				"Histories": [
+					...senderHistories,
+					...receiverHistories
+				]
+			});
+			break;
+		default:
+			receiverHistories = await partner_history.receiverHistory(id);
+            senderHistories = await partner_history.senderHistory(id);
+            res.status(200).send({
+				"Status": true,
+				"Message": "Query successfully",
+				"Histories": [
+					...senderHistories,
+					...receiverHistories
+				]
+			});
+			break;
+	}
+
+	res.status(200).send({
+		"Status": true,
+		"Message": "Query successfully",
+		"Histories": [
+			...receiverHistories,
+			...senderHistories
+		]
+	});
 });
 
 module.exports = router;

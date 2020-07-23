@@ -5,6 +5,7 @@ const debit = require('../model/customers/debit_account');
 const userMiddleware = require('../middleware/userValidate');
 const otpMiddleware = require('../middleware/otpValidate').otpValidate;
 const histories = require('../model/transaction_history');
+const customer = require('../model/customers/customer')
 
 router.post('/charge', [userMiddleware], async function (req, res) {
 	let id = req.body["id"];
@@ -137,8 +138,8 @@ router.get('/history/all', [userMiddleware], async function(req, res) {
 router.get('/history', [userMiddleware], async function (req, res) {
 	let id = req.query["id"];
 	let filter = req.query["filter"] == undefined ? "both" : req.query["filter"];
-	let receiverHistories;
-	let senderHistories;
+	var receiverHistories;
+	var senderHistories;
 	
 	if (id == undefined) {
 		res.status(200).send({
@@ -151,28 +152,209 @@ router.get('/history', [userMiddleware], async function (req, res) {
 	switch (filter) {
 		case "receiver":
 			receiverHistories = await histories.receiverHistory(id);
+			res.status(200).send({
+				"Status": true,
+				"Message": "Query successfully",
+				"Histories": [
+					...receiverHistories
+				]
+			});
 			break;
 		case "sender":
 			senderHistories = await histories.senderHistory(id);
+			res.status(200).send({
+				"Status": true,
+				"Message": "Query successfully",
+				"Histories": [
+					...senderHistories
+				]
+			});
 			break;
 		case "both":
 			receiverHistories = await histories.receiverHistory(id);
 			senderHistories = await histories.senderHistory(id);
+			res.status(200).send({
+				"Status": true,
+				"Message": "Query successfully",
+				"Histories": [
+					...senderHistories,
+					...receiverHistories
+				]
+			});
 			break;
 		default:
 			receiverHistories = await histories.receiverHistory(id);
 			senderHistories = await histories.senderHistory(id);
+			res.status(200).send({
+				"Status": true,
+				"Message": "Query successfully",
+				"Histories": [
+					...senderHistories,
+					...receiverHistories
+				]
+			});
 			break;
 	}
 
-	res.status(200).send({
-		"Status": true,
-		"Message": "Query successfully",
-		"Histories": [
-			...receiverHistories,
-			...senderHistory
-		]
-	});
+	// res.status(200).send({
+	// 	"Status": true,
+	// 	"Message": "Query successfully",
+	// 	"Histories": [
+	// 		...receiverHistories,
+	// 		...senderHistories
+	// 	]
+	// });
+});
+
+router.get('/history/username', [userMiddleware], async function (req, res) {
+	let id = req.query["id"];
+	let filter = req.query["filter"] == undefined ? "both" : req.query["filter"];
+	var receiverHistories;
+	var senderHistories;
+	
+	if (id == undefined) {
+		res.status(200).send({
+			"Status": false,
+			"Message": "id param is missing"
+		});
+		return;
+	}
+
+	let usernameQuery = await customer.getByName(id);
+	if (usernameQuery instanceof Error || usernameQuery.length == 0) {
+        res.status(200).send({
+            "Status" : false,
+            "Message" : "User not found"
+        });
+        return;
+	}
+
+	switch (filter) {
+		case "receiver":
+			receiverHistories = await histories.receiverHistory(usernameQuery.debit.id);
+			res.status(200).send({
+				"Status": true,
+				"Message": "Query successfully",
+				"Histories": [
+					...receiverHistories,
+				]
+			});
+			break;
+		case "sender":
+			senderHistories = await histories.senderHistory(usernameQuery.debit.id);
+			res.status(200).send({
+				"Status": true,
+				"Message": "Query successfully",
+				"Histories": [
+					...senderHistories,
+				]
+			});
+			break;
+		case "both":
+			receiverHistories = await histories.receiverHistory(usernameQuery.debit.id);
+			senderHistories = await histories.senderHistory(usernameQuery.debit.id);
+			res.status(200).send({
+				"Status": true,
+				"Message": "Query successfully",
+				"Histories": [
+					...senderHistories,
+					...receiverHistories
+				]
+			});
+			break;
+		default:
+			receiverHistories = await histories.receiverHistory(usernameQuery.debit.id);
+			senderHistories = await histories.senderHistory(usernameQuery.debit.id);
+			res.status(200).send({
+				"Status": true,
+				"Message": "Query successfully",
+				"Histories": [
+					...senderHistories,
+					...receiverHistories
+				]
+			});
+			break;
+	}
+
+	// res.status(200).send({
+	// 	"Status": true,
+	// 	"Message": "Query successfully",
+	// 	"Histories": [
+	// 		...receiverHistories,
+	// 		...senderHistories
+	// 	]
+	// });
+});
+
+router.get('/history/debit', [userMiddleware], async function (req, res) {
+	let id = req.query["id"];
+	let filter = req.query["filter"] == undefined ? "both" : req.query["filter"];
+	var receiverHistories;
+	var senderHistories;
+	
+	if (id == undefined) {
+		res.status(200).send({
+			"Status": false,
+			"Message": "id param is missing"
+		});
+		return;
+	}
+
+	switch (filter) {
+		case "receiver":
+			receiverHistories = await histories.receiverHistory(id);
+			res.status(200).send({
+				"Status": true,
+				"Message": "Query successfully",
+				"Histories": [
+					...receiverHistories
+				]
+			});
+			break;
+		case "sender":
+			senderHistories = await histories.senderHistory(id);
+			res.status(200).send({
+				"Status": true,
+				"Message": "Query successfully",
+				"Histories": [
+					...senderHistories,
+				]
+			});
+			break;
+		case "both":
+			receiverHistories = await histories.receiverHistory(id);
+			senderHistories = await histories.senderHistory(id);
+			res.status(200).send({
+				"Status": true,
+				"Message": "Query successfully",
+				"Histories": [
+					...senderHistories,
+					...receiverHistories
+				]
+			});
+			break;
+		default:
+			receiverHistories = await histories.receiverHistory(id);
+			senderHistories = await histories.senderHistory(id);
+			res.status(200).send({
+				"Status": true,
+				"Message": "Query successfully",
+				"Histories": [
+					...senderHistories,
+					...receiverHistories
+				]
+			});
+			break;
+	}
+
+	// res.status(200).send({
+	// 	"Status": true,
+	// 	"Message": "Query successfully",
+	// 	"Histories": [
+	// 		...receiverHistories,
+	// 		...senderHistories
+	// 	]
+	// });
 });
 
 module.exports = router;

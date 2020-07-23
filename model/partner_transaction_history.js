@@ -19,6 +19,14 @@ async function getAll(){
     return await db.query(`SELECT * FROM ${tablename}`);
 }
 
+async function receiverHistory(id) {
+    return await db.query(`SELECT * FROM ${tablename} WHERE to_account = ${id}`);
+}
+
+async function senderHistory(id) {
+    return await db.query(`SELECT * FROM ${tablename} WHERE from_account = ${id}`);
+}
+
 /**
  * Create a parter history record
  * @param {*} partner_id 
@@ -64,5 +72,7 @@ module.exports = {
     get,
     getAll,
     create,
-    statistic
+    statistic,
+    receiverHistory,
+    senderHistory
 }

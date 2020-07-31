@@ -59,6 +59,53 @@ function otpValidate(req, res, next) {
     next();
 }
 
+// function otpValidate(req, res) {
+//     let access_token = req.headers["access-token"];
+//     let key = req.headers["key"];
+//     let otp = req.headers["otp"];
+    
+//     if (access_token == undefined) {
+//         res.status(200).send({
+//             "Status" : false,
+//             "Message" : "access-token header is missing"
+//         });
+//     }
+//     if (otp == undefined) {
+//         res.status(200).send({
+//             "Status" : false,
+//             "Message" : "otp header is missing"
+//         });
+//         return;
+//     }
+
+//     if (key == undefined) {
+//         res.status(200).send({
+//             "Status" : false,
+//             "Message" : "key header is missing"
+//         });
+
+//         return;
+//     }
+//     key = Number(key);
+//     if (moment().unix() - key > 60) {
+//         res.status(200).send({
+//             "Status" : false,
+//             "Message" : "OTP is expired"
+//         });
+//         return;
+//     }
+
+//     if (!hotp.check(otp, access_token, key)) {
+//         res.status(200).send({
+//             "Status" : false,
+//             "Message" : "Invalid OTP"
+//         });
+//         return;
+//     }
+
+//     next();
+// }
+
 module.exports = {
     otpValidate,
     createOtp

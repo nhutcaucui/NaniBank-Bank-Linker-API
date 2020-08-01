@@ -5,7 +5,7 @@
 ### API lấy thông tin
 
 
->**POST** /users/customer/get  
+>**GET** /partner/  
 
 <pre>
     <b>Header</b>  
@@ -16,8 +16,8 @@
 
     <b>Body: JSON</b>  
     {  
-        "name": "bank"  
-        "id": 564521456  
+        "name": "KiantoBank"  
+        "id": 9704366600000002  
     }  
 </pre>  
 
@@ -46,7 +46,7 @@
 ### API nộp tiền
 
 
->**POST** /transaction/add  
+>**POST** /partner/transfer
 
 <pre>
     <b>Header</b>   
@@ -59,8 +59,8 @@
     <b>Body: JSON</b>   
     {  
         "name": "bank"  
-        "id": 564521456  
-        "amount": 500  
+        "id": 9704366600000002  
+        "amount": 10000  
     }  
 </pre>
 

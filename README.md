@@ -5,7 +5,7 @@
 ### API lấy thông tin
 
 
->**POST** /users/customer/get  
+>**GET** /partner/  
 
 <pre>
     <b>Header</b>  
@@ -46,7 +46,7 @@
 ### API nộp tiền
 
 
->**POST** /transaction/add  
+>**POST** /partner/transfer
 
 <pre>
     <b>Header</b>   

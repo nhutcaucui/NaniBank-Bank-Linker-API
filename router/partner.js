@@ -42,7 +42,7 @@ router.post('/add', async function (req, res) {
     if (name == undefined) {
         res.status(200).send({
             "status": false,
-            "message": "Yo dawg you don't have a name?"
+            "message": "partner name is missing"
         });
     }
 
@@ -50,7 +50,7 @@ router.post('/add', async function (req, res) {
     if (publicKey == undefined) {
         res.status(200).send({
             "status": false,
-            "message": "Hey hey hey, what is the key?"
+            "message": "public key is missing"
         });
     }
 
@@ -58,7 +58,7 @@ router.post('/add', async function (req, res) {
     if (hashMethod == undefined) {
         res.status(200).send({
             "status": false,
-            "message": "Dude, tell us how you hash your shit so we can contact you later"
+            "message": "hash method is missing"
         });
     }
 
@@ -73,7 +73,7 @@ router.post('/add', async function (req, res) {
     res.status(200).send({
         "status": true,
         "secretKey": "himom",
-        "message": "If anyone ask, you were never here, now go away, this place is not found"
+        "message": "Partner added"
     })
 
 });

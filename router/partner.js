@@ -140,7 +140,18 @@ router.get('/', [hashMiddleware, partnerMiddleware], async function (req, res) {
         return;
     }
 
-    let result = await infos.get(id);
+    let debit = await debits.getById(id)
+
+    if(debit instanceof Error){
+        res.status(200).send({
+            "Status": false,
+            "Message": result.message
+        });
+
+        return;
+    }
+
+    let result = await infos.get(debit.owner);
     if (result instanceof Error) {
         res.status(200).send({
             "Status": false,

@@ -16,8 +16,8 @@
 
     <b>Body: JSON</b>  
     {  
-        "name": "bank"  
-        "id": 564521456  
+        "name": "KiantoBank"  
+        "id": 9704366600000002  
     }  
 </pre>  
 
@@ -59,8 +59,8 @@
     <b>Body: JSON</b>   
     {  
         "name": "bank"  
-        "id": 564521456  
-        "amount": 500  
+        "id": 9704366600000002  
+        "amount": 10000  
     }  
 </pre>
 

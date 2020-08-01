@@ -46,6 +46,47 @@ router.post('/charge', [userMiddleware], async function (req, res) {
 
 });
 
+router.post('/check', [userMiddleware], async function (req, res) {
+	let id = req.body["id"];
+	let amount = req.body["amount"];
+
+	if (id == undefined) {
+		res.status(200).send({
+			"Status" : false,
+			"Message" : "id param is missing"
+		});
+
+		return;
+	}
+
+	if (amount == undefined) {
+		res.status(200).send({
+			"Status" : false,
+			"Message" : "amount param is missing"
+		});
+		return;
+	}
+
+	let result = await debit.check(id, amount);
+
+	if (result) {
+		res.status(200).send({
+			"Status": true,
+			"Message": "Account has enough",
+		});
+		return;
+	}
+	else{
+		res.status(200).send({
+			"Status": false,
+			"Message": "Account doesn't have enough money",
+		});
+		return;
+	}
+	
+
+});
+
 router.post('/draw', [userMiddleware], async function (req, res) {
 	let id = req.body["id"];
 	let amount = req.body["amount"];

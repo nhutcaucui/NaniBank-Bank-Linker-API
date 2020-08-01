@@ -81,6 +81,26 @@ async function charge(id, amount, message = "Charge " + amount  + " to debit acc
     return await db.updatetb(tablename, conditionEntity, valueEntity);
 }
 /**
+ * Check in advance to see if the account have enough money to pay the transaction fee
+ * @param {*} id 
+ * @param {*} amount 
+ */
+async function check(id, amount) {
+    if (amount <= 0) return Error("Amount cannot be negative");
+
+    let result = await getById(id);
+    if (result instanceof Error) return result;
+
+    let account = result;
+    let balance = parseFloat(account.balance);
+
+    if (balance < amount){
+        return false
+    };
+
+    return true
+}
+/**
  * Draw money from debit account
  * @param {*} id id of the debit account
  * @param {*} amount amount of money need to be drawed, amount must not negative
@@ -166,5 +186,6 @@ module.exports = {
     draw,
     charge,
     transfer,
-    externalTransfer
+    externalTransfer,
+    check
 }

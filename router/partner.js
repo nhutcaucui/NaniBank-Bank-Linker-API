@@ -10,6 +10,7 @@ const infos = require('../model/customers/customer_information');
 const partner_history = require('../model/partner_transaction_history');
 const userValidate = require('../middleware/userValidate');
 const customer = require('../model/customers/customer')
+const moment = require('moment');
 
 router.get('/key', [userMiddleware], async function (req, res) {
     let partner_name = req.query["partner_name"]
@@ -428,5 +429,70 @@ router.get('/history/debit', [userMiddleware], async function (req, res) {
 		]
 	});
 });
+
+router.post('/history/create', [userMiddleware], async function (req, res){
+
+    let id = req.body['id'];
+    let from = req.body['from'];
+    let to = req.body['to'];
+    let amount = req.body['amount'];
+    let message = req.body['message'];
+
+    if(id == undefined){
+        res.status(200).send({
+			"Status": false,
+			"Message": "id param is missing"
+		});
+		return;
+    }
+
+    if(from == undefined){
+        res.status(200).send({
+			"Status": false,
+			"Message": "from param is missing"
+		});
+		return;
+    }
+
+    if(to == undefined){
+        res.status(200).send({
+			"Status": false,
+			"Message": "to param is missing"
+		});
+		return;
+    }
+
+    if(amount == undefined){
+        res.status(200).send({
+			"Status": false,
+			"Message": "amount param is missing"
+		});
+		return;
+    }
+
+    if(message == undefined){
+        res.status(200).send({
+			"Status": false,
+			"Message": "message param is missing"
+		});
+		return;
+    }
+
+    let result = await partner_history.create(id, from, to, amount, message)
+
+    if (result instanceof Error) {
+        res.status(200).send({
+            "Status": false,
+            "Message": result.message
+        });
+
+        return;
+    }
+
+    res.status(200).send({
+        "Status": true,
+        "Message": "History created",
+    });
+})
 
 module.exports = router;

@@ -55,6 +55,7 @@ app.use('/debt', debtRouter);
 app.use('/debit', debitRouter);
 app.use('/saving', savingRouter);
 app.use('/otp', otpRouter);
+app.use('/socket.io', io);
 
 
 

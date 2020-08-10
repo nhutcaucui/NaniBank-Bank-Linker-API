@@ -1,7 +1,9 @@
 const server = require('http').createServer();
-const io = require('socket.io')(server);
+const io = require('socket.io')(3000);
+
 io.on('connection', client => {
     client.on('connect', () => {
+        console.log('[Socket] -', 'connect', client.id);
         client.emit('connection-update');
     });
 

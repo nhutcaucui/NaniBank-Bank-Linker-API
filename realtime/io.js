@@ -1,11 +1,10 @@
 const server = require('http').createServer();
-const io = require('socket.io')(3000);
 
+const io = require('socket.io')(server);
+io.users = [];
 io.on('connection', client => {
-    client.on('connect', () => {
-        console.log('[Socket] -', 'connect', client.id);
-        client.emit('connection-update');
-    });
+    console.log('[Socket] -', 'connect', client.id);
+    client.emit('connection-update');
 
     client.on('connection-update', (name) => {
         console.log('[Socket] -', "connection-update", name);
@@ -19,7 +18,7 @@ io.on('connection', client => {
     });
 
     client.on('disconnect', () => {
-        console.log('[Socket] - ', 'disconnect', io.users[client.name]);
+        console.log('[Socket] - ', 'disconnect', client.name);
         delete io.users[client.name];
     });
 });

@@ -20,7 +20,7 @@ var debtRouter = require('./router/debt');
 var debitRouter= require('./router/debit_account');
 var savingRouter = require('./router/saving_account');
 var otpRouter = require('./router/otp');
-var io = require('./realtime/io');
+// var io = require('./realtime/io');
 
 require('dotenv').config()
 

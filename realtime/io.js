@@ -1,6 +1,5 @@
-const server = require('http').createServer();
-
-const io = require('socket.io')(server);
+// const server = require('http').createServer();
+const io = require('socket.io')();
 io.users = [];
 io.on('connection', client => {
     console.log('[Socket] -', 'connect', client.id);
@@ -23,8 +22,9 @@ io.on('connection', client => {
     });
 });
 
-server.listen(8220, () => {
-    console.log('[Socket] - ', 'Listening on', 8220);
-});
+// server.listen(8220, () => {
+//     console.log('[Socket] - ', 'Listening on', 8220);
+// });
+
 
 module.exports = io;

@@ -14,6 +14,11 @@ const config = require('config');
 const secret_key = config.get('secret-key');
 const moment = require('moment');
 
+async function all(relation = true) {
+    let result = await db.query(`SELECT * FROM ${tablename}`);
+    return result;
+}
+
 /**
  * Return a customer record by the specified username
  * @param {*} username username of the customer
@@ -90,7 +95,8 @@ async function create(username, password) {
     let entity = {
         username: username,
         password: hashedPassword
-    }
+    };
+
     user = await db.addtb(tablename, entity);
     tokens.create(user.insertId, await bcrypt.hash(user.insertId.toString(), 2));
     infos.create(user.insertId);

@@ -3,6 +3,7 @@ const moment = require('moment');
 const customers = require('../model/customers/customer');
 const debit = require('../model/customers/debit_account');
 const saving = require('../model/customers/saving_account');
+const faker = require('faker');
 
 describe('Account', function() {
     it('create', async function(done) {
@@ -16,33 +17,11 @@ describe('Account', function() {
         rs = await customers.create("nhutcaucui2", "0985956431");
         rs = await customers.create("tangkiemthusinh", "986024");
         rs = await customers.create("tankiemthusinh", "986024");
+        rs = await customers.create("streetlity", "986024");
 
+        rs = await customers.create(faker.fake("{{name.lastName}}{{name.firstName}}"), "123456");
     });
 
-    it('cretate debit account', async function() {
-        let c = await customers.getByName("nvnamsss");
-        assert.equal(c instanceof Error, false, c.message);
-
-        let result = await debit.create(c.id);
-        
-        result = await debit.create(c.id);
-        assert.equal(result instanceof Error, true, c.message);
-
-    });
-
-    it('create saving account', async function() {
-        let c = await customers.getByName("nvnamsss");
-        assert.equal(c instanceof Error, false, c.message);
-        
-        let result = await saving.create(c.id, "new pc", moment().add(1, "years").unix());
-        assert.equal(result instanceof Error, false);
-        result = await saving.create(c.id, "new pc", moment().add(1, "years").unix());
-        assert.equal(result instanceof Error, true, c.message);
-    });
-
-    it('changePassword', function() {
-        let rs = customers.changePassword("admin", "123456", "abc123");
-    });
 });
 
 describe('Transaction', function() {
@@ -72,3 +51,14 @@ describe('Transaction', function() {
     });
 })
 
+describe('Prepare money', function() {
+    it('charge debit account', async function(){
+        let result = await customers.getByName("nvnamsss");
+        assert.equal(result instanceof Error, false);
+        result = await debit.getByOwner(result.id);
+
+        assert.equal(result instanceof Error, false);
+        result = await debit.charge(result.id, 1000000);
+        assert.equal(result instanceof Error, false);
+    });
+})

@@ -22,26 +22,8 @@ var corsMiddleware = require('./middleware/cors');
 require('dotenv').config()
 
 var app = express();
-<<<<<<< HEAD
-app.all('*', function(req, res, next) {
-  let origin = req.header('origin');
-  if (origin == undefined) {
-    res.status(200).send( {
-      "Status" : false,
-      "Message": "origin header is missing"
-    });
-    return;
-  }
-  origin = cors.origin.indexOf(origin.toLowerCase()) > -1 ? req.headers.origin : cors.default;
-  res.header("Access-Control-Allow-Origin", origin);
-  res.header("Access-Control-Allow-Headers", '*');
-  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE, PATCH");
-  next();
-});
-=======
 
 
->>>>>>> f25a365650ac4cf23cd349f3fd85225cd69ce808
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

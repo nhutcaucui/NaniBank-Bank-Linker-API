@@ -25,7 +25,6 @@ var otpRouter = require('./router/otp');
 require('dotenv').config()
 
 var app = express();
-// app.use(cors());
 app.all('*', function(req, res, next) {
   let origin = req.header('origin');
   if (origin == undefined) {

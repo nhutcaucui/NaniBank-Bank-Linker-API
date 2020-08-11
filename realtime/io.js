@@ -12,8 +12,10 @@ io.on('connection', client => {
     });
 
     client.on('client-notification', (to, message) => {
-        console.log('[Socket] -', "client-notification", name);
-        io.users[to].emit('notification', message);
+        console.log('[Socket] -', "client-notification", to);
+        if (io.users[to] != undefined) {
+            io.users[to].emit('notification', message);
+        }
     });
 
     client.on('disconnect', () => {

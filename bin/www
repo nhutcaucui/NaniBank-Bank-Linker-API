@@ -29,20 +29,23 @@ var server = http.createServer(app);
  */
 
 
-server.listen(port);
+server.listen(port, () => {
+  console.log('Listening on', port);
+  io.listen(server, {
+    handlePreflightRequest: (req, res) => {
+        const headers = {
+            "Access-Control-Allow-Headers": "Content-Type, Authorization",
+            "Access-Control-Allow-Origin": req.headers.origin, //or the specific origin you want to give access to,
+            "Access-Control-Allow-Credentials": true
+        };
+        res.writeHead(200, headers);
+        res.end();
+    }
+  });
+});
 server.on('error', onError);
 server.on('listening', onListening);
-io.listen(server, {
-  handlePreflightRequest: (req, res) => {
-      const headers = {
-          "Access-Control-Allow-Headers": "Content-Type, Authorization",
-          "Access-Control-Allow-Origin": req.headers.origin, //or the specific origin you want to give access to,
-          "Access-Control-Allow-Credentials": true
-      };
-      res.writeHead(200, headers);
-      res.end();
-  }
-});
+
 /**
  * Normalize a port into a number, string, or false.
  */

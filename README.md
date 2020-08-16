@@ -54,13 +54,15 @@
     "timestamp": 12345679121  
     "authen-hash": "3vudiH0Kyo8c7Qa4ihIIvL/yO8fN+ondP6aEhFJlZTA="  
     "sig": ""  
+    "name": "tên bank nguồn"
     }  
 
     <b>Body: JSON</b>   
     {  
-        "name": "bank"  
-        "id": 9704366600000002  
-        "amount": 10000  
+        "from_id": "tài khoản nguồn"
+        "to_id": 9704366600000002  
+        "amount": 10000
+        "message": "nội dung chuyển tiền, có thể rỗng nhưng phải có field"
     }  
 </pre>
 

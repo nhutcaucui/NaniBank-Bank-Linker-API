@@ -82,10 +82,23 @@ async function paid(id) {
     return await db.updatetb(tablename, condition, value);
 }
 
+async function cancel(id) {
+    let condition = {
+        id : id
+    };
+
+    let value = {
+        description: "Canceled"
+    };
+
+    return await db.updatetb(tablename, condition, value);
+}
+
 module.exports = {
     get,
     getRelative,
     create,
     remove,
-    paid
+    paid,
+    cancel
 }

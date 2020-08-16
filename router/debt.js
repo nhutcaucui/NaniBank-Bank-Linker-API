@@ -233,7 +233,7 @@ router.delete('/', [userMiddleware], async function(req, res) {
         return;
     }
 
-    let result = await debt.paid(id);
+    let result = await debt.cancel(id);
 
     if (result instanceof Error) {
         res.status(200).send({

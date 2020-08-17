@@ -92,6 +92,7 @@ body sẽ là {} nếu request không có field
  >**Thuật toán sign PGP**
 
 <pre>
+   const openpgp = require('openpgp');
    async function detachedSign(secret) {
     const { keys: [privateKey] } = await openpgp.key.readArmored(prkey);
     await privateKey.decrypt(passphrase);
@@ -106,5 +107,36 @@ body sẽ là {} nếu request không có field
   }
 </pre>
 
-secret là "himom"
-passphrase là "himom"
+secret: "himom" <br/>
+passphrase: "himom"<br/>
+prkey: privatekey dùng để sign<br/>
+
+>**Example request**
+
+<pre>
+let timestamp = moment().unix();
+    let partnercode = 'nanibank';
+    let body = {
+        "from_id": "tài khoản nguồn"
+        "to_id": 9704366600000002  
+        "amount": 100000
+        "message": "nội dung chuyển tiền, có thể rỗng nhưng phải có field"
+    };
+    // let detechedSignature = '';
+    let detechedSignature = await pgp.detachedSign('himom');
+    
+    let csi = sha1(timestamp + JSON.stringify(body) + 'himom')
+    axios.post('http://7d32d69eaef0.ngrok.io/api/account/money',body, {
+        headers: {
+            timestamp: timestamp,
+            partnercode: partnercode,
+            'authen-hash': csi,
+            sig: detechedSignature,
+        }
+    }).then(function (res) {
+        console.log(res.data);
+    }).catch(function (error) {
+        console.log(error);
+    });
+</pre>
+

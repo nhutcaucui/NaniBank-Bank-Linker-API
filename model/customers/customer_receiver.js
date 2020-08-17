@@ -29,6 +29,21 @@ async function create(customer_id, receiver, remind_name) {
     return result;
 }
 
+async function update(customer_id, receiver, remind_name) {
+    // let condition = {
+    //     receiver: receiver,
+    //     customer_id : customer_id,
+    // };
+
+    // let value = {
+    //     remind_name: remind_name
+    // };
+
+  
+    let result = await db.query(`UPDATE ${tablename} SET remind_name = '${remind_name}' WHERE receiver = ${receiver} AND customer_id=${customer_id}`);
+    return result;
+}
+
 /**
  * Remove a specified receiver from a customer
  * @param {*} customer_id customer id
@@ -42,5 +57,6 @@ async function remove(customer_id, receiver) {
 module.exports = {
     get,
     create,
+    update,
     remove
 }

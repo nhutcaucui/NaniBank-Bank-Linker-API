@@ -219,6 +219,56 @@ router.post('/receiver/', [userMiddleware], async function (req, res) {
    });
 });
 
+router.post('/receiver/edit', [userMiddleware], async function (req, res) {
+   let customer_id = req.body["customer_id"];
+   let rcver = req.body["receiver"];
+   let remind_name = req.body["remind_name"];
+
+   if (customer_id == undefined) {
+      res.status(200).send({
+         "Status": false,
+         "Message": "customer_id param is missing"
+      });
+
+      return;
+   }
+
+   if (rcver == undefined) {
+      res.status(200).send({
+         "Status": false,
+         "Message": "receiver param is missing"
+      });
+
+      return;
+   }
+
+   if (remind_name == undefined) {
+      res.status(200).send({
+         "Status": false,
+         "Message": "remind_name param is missing"
+      });
+
+      return;
+   }
+
+   let result = await receivers.update(customer_id, rcver, remind_name);
+
+   if (result instanceof Error) {
+      res.status(200).send({
+         "Status": false,
+         "Message": result.message
+      });
+
+      return;
+   }
+
+   res.status(200).send({
+      "Status": true,
+      "Message": "Edited",
+      "Receiver": result
+   });
+});
+
 /**
  * Add a debit account as an receiver
  */

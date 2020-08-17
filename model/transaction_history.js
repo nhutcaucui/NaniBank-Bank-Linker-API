@@ -1,5 +1,6 @@
 const db = require('./db');
 const tablename = "transaction_history";
+const moment = require('moment');
 
 /**
  * Return a history record by specified id

@@ -37,6 +37,7 @@ async function senderHistory(id) {
  * @param {*} message 
  */
 async function create(partner_id, from, to, amount, message) {
+    if (partner_id)
     let entity = {
         from_account : from,
         to_account : to,

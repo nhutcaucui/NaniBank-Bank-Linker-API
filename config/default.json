@@ -3,12 +3,12 @@
         "dbConfig": {
             "host": "localhost",
             "user": "root",
-            "password": "",
+            "password": "manager",
             "database": "nanibank"
         }
     },
     "secret-key": "himom",
-    "60-days-key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZXhwIjoxNTk2NjIyMDMzLCJpYXQiOjE1OTE0MzgwMzN9.yzEJk2Jp9yLrOvVD-TFUnhj5Yf-w2k1VKm58jGg7zQY",
+    "60-days-key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZXhwIjoxNTk3Njc0NTkwLCJpYXQiOjE1OTc2NzM2OTB9.rLSNjkVT5ITkukctczj0lXTHEYhUcrIIm7RrlKdzm1E",
     "mail-host" : "localhost:6920",
     "upper-limit": 30,
     "lower-limit": -30

@@ -113,8 +113,16 @@ router.post('/transfer', [hashMiddleware, partnerMiddleware, verify], async func
     }
 
     // let signature = pgp.sign("himom");
+    let partner = await partners.name(name);
+    if (partner instanceof Error) {
+        res.status(200).send({
+            "status": false,
+            "message" : partner.message
+        });
+        return;
+    }
 
-    let result = await debits.externalTransfer(name, from_id, to_id, amount, message);
+    let result = await debits.externalTransfer(partner.id, from_id, to_id, amount, message);
     if (result instanceof Error) {
         res.status(200).send({
             "status": false,
@@ -146,7 +154,7 @@ router.get('/', [hashMiddleware, partnerMiddleware], async function (req, res) {
     if(debit instanceof Error){
         res.status(200).send({
             "Status": false,
-            "Message": result.message
+            "Message": debit.message
         });
 
         return;

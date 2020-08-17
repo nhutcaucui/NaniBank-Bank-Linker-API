@@ -4,6 +4,7 @@ const customers = require('../model/customers/customer');
 const debit = require('../model/customers/debit_account');
 const saving = require('../model/customers/saving_account');
 const faker = require('faker');
+const customer_information = require('../model/customers/customer_information');
 
 describe('Account', function() {
     it('create', async function(done) {
@@ -20,6 +21,16 @@ describe('Account', function() {
         rs = await customers.create("streetlity", "986024");
 
         rs = await customers.create(faker.fake("{{name.lastName}}{{name.firstName}}"), "123456");
+    });
+
+    it('update information', async function(){
+        customer_information.update(2, "nvnam.c@gmail.com", "Nguyen Vi Nam", "0966087304");
+        customer_information.update(3, "nhutcaucui@gmail.com", "Le Minh Nhut", "0985399536");
+        customer_information.update(4, "nhutcaucui@gmail.com", "Le Minh Nhut", "0985399536");
+        customer_information.update(5, "nhutcaucui@gmail.com", "Le Minh Nhut", "0985399536");
+        customer_information.update(6, "nhutcaucui@gmail.com", "Nguyen Vi Nam", "0985399536");
+        customer_information.update(7, "nhutcaucui@gmail.com", "Nguyen Vi Nam", "0985399536");
+        customer_information.update(8, "nhutcaucui@gmail.com", "Nguyen Vi Nam", "0985399536");
     });
 
 });

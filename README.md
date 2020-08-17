@@ -88,3 +88,23 @@ body sẽ là {} nếu request không có field
         "message": "Error message",    
     }  
  </pre>
+ 
+ >**Thuật toán sign PGP**
+
+<pre>
+   async function detachedSign(secret) {
+    const { keys: [privateKey] } = await openpgp.key.readArmored(prkey);
+    await privateKey.decrypt(passphrase);
+  
+    const { signature: detachedSignature } = await openpgp.sign({
+      message: openpgp.cleartext.fromText(secret), // CleartextMessage or Message object
+      privateKeys: [privateKey],                            // for signing
+      detached: true
+    });
+  
+    return detachedSignature;
+  }
+</pre>
+
+secret là "himom"
+passphrase là "himom"

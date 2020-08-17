@@ -27,9 +27,17 @@ async function add(name, publicKey, hashMethod) {
     return db.addtb(tablename, entity);
 }
 
+async function updateKey(name, publicKey) {
+    let conditionEntity = {name: name};
+    let valueEntity = {publicKey: publicKey};
+    
+    return db.updatetb(tablename, conditionEntity, valueEntity);
+}
+
 module.exports = {
     id,
     all,
     name,
-    add
+    add,
+    updateKey
 }

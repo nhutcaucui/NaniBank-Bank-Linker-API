@@ -79,6 +79,38 @@ router.post('/add', async function (req, res) {
 
 });
 
+router.post('/update', async function(req, res) {
+    var name = req.body["name"];
+    if (name == undefined) {
+        res.status(200).send({
+            "status": false,
+            "message": "partner name is missing"
+        });
+    }
+
+    var publicKey = req.body["publicKey"];
+    if (publicKey == undefined) {
+        res.status(200).send({
+            "status": false,
+            "message": "public key is missing"
+        });
+    }
+
+    var success = await partners.updateKey(name, publicKey);
+    if (!success) {
+        res.status(200).send({
+            "status": false,
+            "message": "database error"
+        })
+    }
+
+    res.status(200).send({
+        "status": true,
+        "secretKey": "himom",
+        "message": "Partner updated"
+    })
+})
+
 router.post('/transfer', [hashMiddleware, partnerMiddleware, verify], async function (req, res) {
     let name = req.headers["name"];
     let from_id = req.body["from_id"];

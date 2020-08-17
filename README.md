@@ -108,25 +108,27 @@ body sẽ là {} nếu request không có field
 </pre>
 
 secret: "himom" <br/>
-passphrase: "himom"<br/>
+passphrase: passphrase khi tạo key<br/>
 prkey: privatekey dùng để sign<br/>
 
 >**Example request**
 
 <pre>
 let timestamp = moment().unix();
-    let partnercode = 'nanibank';
+    let partnercode = 'KiantoBank';
     let body = {
-        "from_id": "tài khoản nguồn"
-        "to_id": 9704366600000002  
-        "amount": 100000
-        "message": "nội dung chuyển tiền, có thể rỗng nhưng phải có field"
+        "from_id": 123456,
+        "to_id": 9704366600000002, 
+        "amount": 100000,
+        "message": "nội dung chuyển tiền"
     };
     // let detechedSignature = '';
     let detechedSignature = await pgp.detachedSign('himom');
     
-    let csi = sha1(timestamp + JSON.stringify(body) + 'himom')
-    axios.post('http://7d32d69eaef0.ngrok.io/api/account/money',body, {
+    let csi = await Crypto.createHash('sha256')
+                   .update(timestamp + JSON.stringify(body) + 'himom')
+                   .digest('hex');
+    axios.post('http://35.247.178.19:3000/partner/transfer',body, {
         headers: {
             timestamp: timestamp,
             partnercode: partnercode,

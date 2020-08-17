@@ -12,7 +12,8 @@
     {  
     "timestamp": 12345679121  
     "authen-hash": "3vudiH0Kyo8c7Qa4ihIIvL/yO8fN+ondP6aEhFJlZTA="
-    "name": "KiantoBank" 
+    "name": "KiantoBank"
+    "origin": "domain name"
     }  
 
     <b>Param</b>  
@@ -23,9 +24,12 @@
 
 
 "authen-hash": SHA256(timestamp+secretkey+body).digest(hex)  
+body sẽ là {} nếu request không có field
  "timestamp": Thời gian gửi, nếu thời gian hiện tại - thời gian gửi > 30s, request bị từ chối  
  "name": tên ngân hàng đối tác  
  "id": số tài khoản cần tra  
+ "origin": dùng để check cors, browser sẽ tự add origin vào
+ 
 
 >**Return**  
  <pre>

@@ -70,7 +70,7 @@ body sẽ là {} nếu request không có field
     }  
 </pre>
 
- "sig": signature sign với secret key  
+ "sig": signature sign với secret key encode base64
  "amount": số tiền cần nộp  
 
 >**Return**  

@@ -69,12 +69,15 @@ async function detachedVerify(detachedSignature, bank) {
             console.log(
                 "Signed by key id " + verified.signatures[0].keyid.toHex()
             );
-            return Promise.resolve({ message: "Signature verified" });
+            //return Promise.resolve({ message: "Signature verified" });
+            return true;
         } else {
-            return Promise.reject("Signature could not be verified");
+            //return Promise.reject("Signature could not be verified");
+            return false;
         }
     } catch (e) {
-        return Promise.reject("Signature could not be verified");
+        // return Promise.reject("Signature could not be verified");
+        return false;
     }
 };
 

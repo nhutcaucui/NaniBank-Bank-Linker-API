@@ -41,5 +41,6 @@ async function refresh(access_token, refresh_token) {
 module.exports = {
     get,
     refresh,
-    create
+    create,
+    tablename: tablename
 }

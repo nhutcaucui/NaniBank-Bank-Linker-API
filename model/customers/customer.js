@@ -13,6 +13,7 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 const secret_key = config.get('secret-key');
 const moment = require('moment');
+const customer_token = require('./customer_token');
 
 async function all(relation = true) {
     let result = await db.query(`SELECT * FROM ${tablename}`);
@@ -169,7 +170,7 @@ async function login(username, password, constraint = true) {
 
     let conditionEntity = {refresh_token: refreshToken.refresh_token};
     let valueEntity = {access_token: token};
-    db.updatetb(tablename, conditionEntity, valueEntity);
+    db.updatetb(customer_token.tablename, conditionEntity, valueEntity);
 
     return {token : token, refresh_token: refreshToken.refresh_token, customer : {
         id: customer.id,
@@ -186,5 +187,6 @@ module.exports = {
     changePassword,
     resetPassword,
     create,
-    login
+    login,
+    tablename : tablename
 }

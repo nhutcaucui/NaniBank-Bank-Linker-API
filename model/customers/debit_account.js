@@ -27,7 +27,7 @@ async function getById(id) {
 }
 
 async function getByCustomerId(customer_id) {
-    let debit_id = 9704366600000000 + Number(customer_id);
+    let debit_id = 97043666000000 + Number(customer_id);
     return getById(debit_id);
 }
 

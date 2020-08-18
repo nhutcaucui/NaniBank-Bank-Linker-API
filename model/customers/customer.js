@@ -123,7 +123,7 @@ async function changePassword(username, old_password, new_password) {
 
     let hashedPassword = await bcrypt.hash(new_password, SALT_ROUNDS);
     let conditionEntity = {
-        id: username
+        username: username
     };
     let valueEntity = {
         password: hashedPassword,

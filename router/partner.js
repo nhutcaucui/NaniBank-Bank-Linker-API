@@ -154,6 +154,7 @@ router.post('/transfer', [hashMiddleware, partnerMiddleware, verify], async func
         return;
     }
 
+    console.log('[Partner] -', partner);
     let result = await debits.externalTransfer(partner.id, from_id, to_id, amount, message);
     if (result instanceof Error) {
         res.status(200).send({

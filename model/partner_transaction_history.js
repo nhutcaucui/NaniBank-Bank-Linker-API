@@ -37,6 +37,10 @@ async function senderHistory(id) {
  * @param {*} message 
  */
 async function create(partner_id, from, to, amount, message) {
+    if (isNaN(partner_id)) {
+        return new Error("Invalid partner id");
+    }
+    
     let entity = {
         from_account : from,
         to_account : to,

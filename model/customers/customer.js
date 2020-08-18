@@ -158,7 +158,7 @@ async function login(username, password, constraint = true) {
     let customer = result;
 
     if (constraint) {
-        let match = bcrypt.compare(password, customer.password);
+        let match = await bcrypt.compare(password, customer.password);
         if (!match) return new Error("Username or password does not match");
     }
 

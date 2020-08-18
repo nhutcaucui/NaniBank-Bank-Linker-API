@@ -101,6 +101,7 @@ async function create(username, password) {
     tokens.create(user.insertId, await bcrypt.hash(user.insertId.toString(), 2));
     infos.create(user.insertId);
     debits.create(user.insertId);
+    //console.log("insertId" + user.insertId);
     return {id: user.insertId, username : username};
 }
 

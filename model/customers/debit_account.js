@@ -36,7 +36,9 @@ async function getByCustomerId(customer_id) {
  * @param {*} owner customer id of the owner
  */
 async function create(owner) {
-    let id = 9704366600000000 + Number(owner);
+    //console.log(owner + " " + Number(owner) + " "+ (9704366600000000 + Number(owner)))
+    let id = 97043666000000 + Number(owner);
+    //console.log("debitId" + id);
     let result = await db.query(`SELECT * FROM ${tablename} WHERE id=${id}`);
     if (result.length > 0) return new Error("User already have the debit account");
 

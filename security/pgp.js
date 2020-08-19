@@ -60,7 +60,7 @@ async function detachedVerify(detachedSignature, bank) {
         const verified = await openpgp.verify({
             message: await openpgp.message.fromText("himom"),
             signature: await openpgp.signature.readArmored(
-                new Buffer(sign, "base64").toString("ascii")
+                new Buffer.from(sign, "base64").toString("ascii")
             ),
             publicKeys: (await openpgp.key.readArmored(publickeys[bank])).keys, // for verification
         });
@@ -72,10 +72,12 @@ async function detachedVerify(detachedSignature, bank) {
             //return Promise.resolve({ message: "Signature verified" });
             return true;
         } else {
+            console.log("Key is not valid")
             //return Promise.reject("Signature could not be verified");
             return false;
         }
     } catch (e) {
+        console.log(e);
         // return Promise.reject("Signature could not be verified");
         return false;
     }

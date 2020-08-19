@@ -18,7 +18,7 @@
 
     <b>Param</b>  
     {   
-        "id": 9704366600000002  
+        "id": 97043666000010  
     }  
 </pre>  
 
@@ -64,7 +64,7 @@ body sẽ là {} nếu request không có field
     <b>Body: JSON</b>   
     {  
         "from_id": "tài khoản nguồn"
-        "to_id": 9704366600000002  
+        "to_id": 97043666000010  
         "amount": 10000
         "message": "nội dung chuyển tiền, có thể rỗng nhưng phải có field"
     }  
@@ -114,28 +114,25 @@ prkey: privatekey dùng để sign<br/>
 >**Example request**
 
 <pre>
-let timestamp = moment().unix();
-    let partnercode = 'KiantoBank';
-    let body = {
-        "from_id": 123456,
-        "to_id": 9704366600000002, 
-        "amount": 100000,
-        "message": "nội dung chuyển tiền"
-    };
-    // let detechedSignature = '';
-    let detechedSignature = await pgp.detachedSign('himom');
-    
-    let csi = await Crypto.createHash('sha256')
-                   .update(timestamp + JSON.stringify(body) + 'himom')
-                   .digest('hex');
-    axios.post('http://35.247.178.19:3000/partner/transfer',body, {
-        headers: {
-            timestamp: timestamp,
-            partnercode: partnercode,
-            'authen-hash': csi,
-            sig: detechedSignature,
-        }
-    }).then(function (res) {
+var timestamp = moment().unix();
+      var secretKey= 'himom';
+      const body = {
+    from_id: 123456789,
+    to_id: 97043666000010,
+    amount: 1000000,
+    message: 'this is a fake test',
+      }
+  var detachedSignature = await pgp.detachedSign('himom');
+    var config={headers: {
+        //origin: "www.nguyen.com",
+        name: "nanibank",
+        timestamp: timestamp,
+        "authen-hash": Crypto.createHash('sha256').update(timestamp + secretKey + JSON.stringify(body)).digest('hex'),
+        sig: new Buffer.from(detachedSignature).toString('base64'),
+      }
+    }
+      
+    axios.post('http://35.247.178.19:3000/partner/transfer',body, config).then(function (res) {
         console.log(res.data);
     }).catch(function (error) {
         console.log(error);

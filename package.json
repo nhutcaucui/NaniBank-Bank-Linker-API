@@ -33,7 +33,7 @@
     "openpgp": "^4.10.4",
     "otplib": "^12.0.1",
     "sha256": "^0.2.0",
-    "socket.io": "^2.3.0",
+    "socket.io": "^2.4.0",
     "vuex-persistedstate": "^3.0.1"
   },
   "description": "\"# APITruyVan\"",

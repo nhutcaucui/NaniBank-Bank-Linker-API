@@ -49,6 +49,6 @@
   },
   "homepage": "https://github.com/nhutcaucui/NaniBank-Bank-Linker-API#readme",
   "devDependencies": {
-    "mocha": "^7.1.2"
+    "mocha": "^10.2.0"
   }
 }
